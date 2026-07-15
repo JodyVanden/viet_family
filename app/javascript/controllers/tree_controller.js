@@ -139,8 +139,26 @@ export default class extends Controller {
     this.nodeEls.set(n.id, card)
   }
 
-  // Overridden behaviour arrives in T4.6; base version is a no-op hook.
-  selectViewpoint(_id) {}
+  // Relabel every node with the term the chosen viewpoint uses for them, looked
+  // up from the server-computed matrix. The engine is never run on the client.
+  selectViewpoint(id) {
+    this.viewpointId = id
+    const terms = this.termsValue[id] || {}
+
+    this.nodeEls.forEach((card, nodeId) => {
+      const termEl = card.querySelector(".node-term")
+      const isViewpoint = nodeId === id
+      card.style.outline = isViewpoint ? "2px solid #4f46e5" : "none"
+      card.style.borderRadius = "8px"
+      termEl.textContent = isViewpoint ? "— bạn —" : (terms[nodeId] || "")
+    })
+
+    const hint = document.getElementById("viewpoint-hint")
+    if (hint) {
+      const self = this.nodesValue.find((n) => n.id === id)
+      hint.textContent = `Viewing as ${self ? self.name : ""} — each label is how this person addresses them.`
+    }
+  }
 
   setupPanZoom() {
     this.applyTransform()

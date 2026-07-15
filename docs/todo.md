@@ -40,8 +40,8 @@ minimally, refactor, verify, then commit (ask first). Check off only after tests
 - [x] **T4.3** Relationships UI (link parent/child/spouse) + system test
 - [x] **T4.4** Notes CRUD per person (Turbo Streams) + system test
 - [x] **T4.5** Tree visualization (importmap tree lib + Stimulus, portraits, pan/zoom) + system test
-- [ ] **T4.6** Viewpoint selection (headline) — relabel all nodes; assert Ba vợ vs Ông ngoại + system test
-- [ ] **C4** Checkpoint: full create→link→portrait→tree→viewpoint flow works — commit
+- [x] **T4.6** Viewpoint selection (headline) — relabel all nodes; assert Ba vợ vs Ông ngoại + system test
+- [x] **C4** Checkpoint: full create→link→portrait→tree→viewpoint flow works — commit
 
 ## P5 — Ship
 - [ ] **T5.1** README/quickstart, docs sync, /review, /code-simplify, final rubocop, demo seed
