@@ -1,0 +1,30 @@
+<div class="max-w-3xl mx-auto p-6">
+  <%= link_to "← Family", people_path, class: "text-sm text-indigo-600" %>
+
+  <div class="mt-4 flex items-start gap-6 bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+    <%= portrait_tag(@person, size: 112) %>
+    <div class="flex-1">
+      <h1 class="text-2xl font-bold text-gray-900"><%= @person.name %></h1>
+      <p class="text-gray-500 mt-1">
+        <%= @person.gender.capitalize %><% if life_span(@person) %> · <%= life_span(@person) %><% end %>
+      </p>
+      <div class="mt-4 flex gap-3">
+        <%= link_to "Edit", edit_person_path(@person), class: "px-3 py-1.5 rounded-md bg-white border border-gray-300 text-gray-700 hover:bg-gray-50" %>
+        <%= button_to "Remove", @person, method: :delete, class: "px-3 py-1.5 rounded-md bg-red-50 border border-red-200 text-red-700 hover:bg-red-100", form: { data: { turbo_confirm: "Remove #{@person.name}?" } } %>
+      </div>
+    </div>
+  </div>
+
+  <section class="mt-6">
+    <h2 class="text-lg font-semibold text-gray-900 mb-2">Stories &amp; notes</h2>
+    <% if @notes.any? %>
+      <ul class="space-y-2">
+        <% @notes.each do |note| %>
+          <li class="bg-white rounded-md border border-gray-200 p-3 text-gray-800"><%= simple_format(note.body) %></li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="text-gray-500 text-sm">No notes yet.</p>
+    <% end %>
+  </section>
+</div>

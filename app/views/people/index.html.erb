@@ -1,0 +1,24 @@
+<div class="max-w-4xl mx-auto p-6">
+  <div class="flex items-center justify-between mb-6">
+    <h1 class="text-2xl font-bold text-gray-900">Family</h1>
+    <div class="flex gap-3">
+      <%= link_to "Add person", new_person_path, class: "px-4 py-2 rounded-md bg-indigo-600 text-white hover:bg-indigo-700" %>
+    </div>
+  </div>
+
+  <% if @people.any? %>
+    <ul class="divide-y divide-gray-200 bg-white rounded-lg shadow-sm border border-gray-200">
+      <% @people.each do |person| %>
+        <li class="flex items-center gap-4 p-4 hover:bg-gray-50">
+          <%= link_to portrait_tag(person), person, class: "shrink-0" %>
+          <div class="min-w-0">
+            <%= link_to person.name, person, class: "font-medium text-gray-900 hover:text-indigo-600" %>
+            <p class="text-sm text-gray-500"><%= life_span(person) %></p>
+          </div>
+        </li>
+      <% end %>
+    </ul>
+  <% else %>
+    <p class="text-gray-500">No people yet. <%= link_to "Add the first person", new_person_path, class: "text-indigo-600" %>.</p>
+  <% end %>
+</div>

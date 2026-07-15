@@ -35,7 +35,7 @@ minimally, refactor, verify, then commit (ask first). Check off only after tests
 - [x] **C3** Checkpoint: round-trip identical, terms unchanged — commit
 
 ## P4 — UI (Hotwire, vertical slices)
-- [ ] **T4.1** People index + show (portrait/placeholder) + system test
+- [x] **T4.1** People index + show (portrait/placeholder) + system test
 - [ ] **T4.2** New/edit person (Turbo form) + portrait upload + system test
 - [ ] **T4.3** Relationships UI (link parent/child/spouse) + system test
 - [ ] **T4.4** Notes CRUD per person (Turbo Streams) + system test

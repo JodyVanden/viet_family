@@ -58,6 +58,10 @@ group :development, :test do
 
   # Test coverage
   gem "simplecov", require: false
+
+  # System (browser) tests
+  gem "capybara"
+  gem "selenium-webdriver"
 end
 
 group :development do
