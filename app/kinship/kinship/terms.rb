@@ -150,9 +150,9 @@ module Kinship
       return "nội" if father && @graph.parents(father).include?(grandparent_id)
       return "ngoại" if mother && @graph.parents(mother).include?(grandparent_id)
 
-      # :nocov: defensive — grandparent_term only calls this for actual grandparents.
+      # simplecov:disable — defensive; grandparent_term only calls this for grandparents.
       nil
-      # :nocov:
+      # simplecov:enable
     end
   end
 end

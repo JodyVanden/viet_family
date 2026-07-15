@@ -20,7 +20,7 @@ minimally, refactor, verify, then commit (ask first). Check off only after tests
 - [x] **C1** Checkpoint: golden suite green, coverage met, no Rails deps — commit
 
 ## P2 — Persistence & graph adapter
-- [ ] **T2.1** `Person` model + migration + factory + validations
+- [x] **T2.1** `Person` model + migration + factory + validations
 - [ ] **T2.2** `Relationship` self-join (parent/spouse) + migration + validations (no cycles/dupes)
 - [ ] **T2.3** `Note` model + factory
 - [ ] **T2.4** Portrait via Active Storage + content-type/size validation
