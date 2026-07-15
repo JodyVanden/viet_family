@@ -39,7 +39,18 @@
 
   <div>
     <%= f.label :portrait, class: "block text-sm font-medium text-gray-700" %>
-    <%= f.file_field :portrait, accept: "image/png,image/jpeg,image/webp", class: "mt-1 block w-full text-sm" %>
+    <div class="mt-1 flex items-center gap-4">
+      <% if person.portrait.attached? %>
+        <%= image_tag person.portrait, alt: person.name,
+              class: "w-16 h-16 rounded-full object-cover border border-gray-200 shrink-0" %>
+      <% end %>
+      <%= f.file_field :portrait, accept: "image/png,image/jpeg,image/webp",
+            class: "block w-full text-sm text-gray-600 " \
+                   "file:mr-3 file:py-2 file:px-4 file:rounded-md file:border-0 " \
+                   "file:bg-indigo-600 file:text-white file:font-medium file:cursor-pointer " \
+                   "hover:file:bg-indigo-700" %>
+    </div>
+    <p class="text-xs text-gray-500 mt-1">PNG, JPEG, or WebP, up to 5 MB.</p>
   </div>
 
   <div class="flex gap-3">
