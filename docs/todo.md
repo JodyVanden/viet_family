@@ -9,7 +9,7 @@ minimally, refactor, verify, then commit (ask first). Check off only after tests
 
 ## P1 — Kinship engine (pure Ruby, no DB) — highest risk
 - [x] **T1.1** Fixture family + `kinship_vectors.json` + golden-vector RSpec harness (red baseline)
-- [ ] **T1.2** `Kinship::Graph` — siblings/children derivation, spouse edges, shortest-path
+- [x] **T1.2** `Kinship::Graph` — siblings/children derivation, spouse edges, shortest-path
 - [ ] **T1.3** `Kinship.senior?` — birth_date → birth_order → unknown precedence
 - [ ] **T1.4** Terms: grandparents & parents (Ông/Bà nội·ngoại, Ba/Má)
 - [ ] **T1.5** Terms: siblings (anh/chị/em via senior?)
