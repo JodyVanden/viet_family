@@ -357,9 +357,32 @@ export default class extends Controller {
     term.style.cssText = "font-size:12px;color:#4f46e5;min-height:16px;"
 
     card.append(avatar, name, term)
-    card.addEventListener("click", (e) => { e.stopPropagation(); this.highlightPerson(n.id) })
+    card.addEventListener("click", (e) => {
+      e.stopPropagation()
+      this.highlightPerson(n.id)
+      this.centerOn(n.id)
+    })
     this.world.appendChild(card)
     this.nodeEls.set(n.id, card)
+  }
+
+  // Glide the viewport so the given person sits in the middle, zooming in to a
+  // readable level if the tree is currently zoomed out.
+  centerOn(id) {
+    const pos = this.positions.get(id)
+    if (!pos) return
+
+    const C = this.constructor
+    this.scale = Math.max(this.scale, 1)
+    const cx = pos.x + C.NODE_W / 2
+    const cy = pos.y + C.NODE_H / 2
+    this.tx = this.element.clientWidth / 2 - cx * this.scale
+    this.ty = this.element.clientHeight / 2 - cy * this.scale
+
+    this.world.style.transition = "transform 0.35s ease"
+    this.applyTransform()
+    clearTimeout(this.transitionTimer)
+    this.transitionTimer = setTimeout(() => { this.world.style.transition = "" }, 400)
   }
 
   // ---- labels & lineage highlight ----------------------------------------
@@ -437,6 +460,7 @@ export default class extends Controller {
     let startY = 0
     this.element.addEventListener("pointerdown", (e) => {
       dragging = true; startX = e.clientX - this.tx; startY = e.clientY - this.ty
+      this.world.style.transition = "" // cancel any glide so dragging is immediate
       this.element.style.cursor = "grabbing"
     })
     // Kept as bound references so disconnect() can remove them (Turbo reconnects
@@ -458,6 +482,7 @@ export default class extends Controller {
   disconnect() {
     if (this.onPointerMove) window.removeEventListener("pointermove", this.onPointerMove)
     if (this.onPointerUp) window.removeEventListener("pointerup", this.onPointerUp)
+    clearTimeout(this.transitionTimer)
   }
 
   applyTransform() {
