@@ -5,4 +5,26 @@
 # Rails, or perform I/O — that is what keeps it exhaustively testable and portable
 # to a future mobile app. See docs/SPEC.md §2.
 module Kinship
+  module_function
+
+  # Seniority of person +a+ relative to +b+, used to distinguish sibling-based
+  # terms (bác vs. chú, anh/chị vs. em). Precedence: compare reliable birth_dates;
+  # otherwise fall back to birth_order; otherwise :unknown. Returns one of
+  # :older, :younger, :same, or :unknown. Only meaningful for siblings, where
+  # birth_order is comparable.
+  def seniority(a, b)
+    cmp =
+      if a.birth_date && b.birth_date
+        a.birth_date <=> b.birth_date
+      elsif a.birth_order && b.birth_order
+        a.birth_order <=> b.birth_order
+      end
+    return :unknown if cmp.nil?
+    return :same if cmp.zero?
+
+    cmp.negative? ? :older : :younger
+  end
+
+  # Boolean shortcut: is +a+ strictly older/senior to +b+? (:unknown ⇒ false).
+  def senior?(a, b) = seniority(a, b) == :older
 end
