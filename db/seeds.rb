@@ -7,3 +7,9 @@
 #   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
+
+# Canonical sample Vietnamese family (see Family::Seeder), incl. the driving
+# perspective case: "Ba Vợ" is the husband's father-in-law but the son's
+# maternal grandfather (Ông ngoại).
+Family::Seeder.seed!
+puts "Seeded #{Person.count} people and #{Relationship.count} relationships."

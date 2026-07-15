@@ -25,8 +25,8 @@ minimally, refactor, verify, then commit (ask first). Check off only after tests
 - [x] **T2.3** `Note` model + factory
 - [x] **T2.4** Portrait via Active Storage + content-type/size validation
 - [x] **T2.5** Graph adapter: AR records → `Kinship::Graph` (reuse engine); end-to-end term spec
-- [ ] **T2.6** Seeds: canonical sample family incl. driving case
-- [ ] **C2** Checkpoint: seeded DB computes correct term via adapter+engine — commit
+- [x] **T2.6** Seeds: canonical sample family incl. driving case
+- [x] **C2** Checkpoint: seeded DB computes correct term via adapter+engine — commit
 
 ## P3 — Versioned JSON contract
 - [ ] **T3.1** `Family::Exporter` → versioned JSON (decide portrait encoding)
