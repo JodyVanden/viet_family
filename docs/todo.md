@@ -11,7 +11,7 @@ minimally, refactor, verify, then commit (ask first). Check off only after tests
 - [x] **T1.1** Fixture family + `kinship_vectors.json` + golden-vector RSpec harness (red baseline)
 - [x] **T1.2** `Kinship::Graph` — siblings/children derivation, spouse edges, shortest-path
 - [x] **T1.3** `Kinship.senior?` — birth_date → birth_order → unknown precedence
-- [ ] **T1.4** Terms: grandparents & parents (Ông/Bà nội·ngoại, Ba/Má)
+- [x] **T1.4** Terms: grandparents & parents (Ông/Bà nội·ngoại, Ba/Má)
 - [ ] **T1.5** Terms: siblings (anh/chị/em via senior?)
 - [ ] **T1.6** Terms: parent's siblings (bác/chú/cô/cậu/dì + thím/mợ/dượng; all father's sisters = Cô)
 - [ ] **T1.7** Terms: spouse & parents-in-law (chồng/vợ, Ba/Má vợ·chồng) — driving perspective case

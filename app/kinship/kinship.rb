@@ -27,4 +27,11 @@ module Kinship
 
   # Boolean shortcut: is +a+ strictly older/senior to +b+? (:unknown ⇒ false).
   def senior?(a, b) = seniority(a, b) == :older
+
+  # The Vietnamese kinship term the +viewer+ uses for the +target+, computed over
+  # +graph+ in the given +dialect+. Returns the target's plain name when no term
+  # applies, or nil if either id is unknown.
+  def term(viewer:, target:, graph:, dialect: :southern)
+    Terms.new(graph, dialect).term(viewer, target)
+  end
 end
