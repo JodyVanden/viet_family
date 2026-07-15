@@ -1,0 +1,46 @@
+<section class="mt-6">
+  <h2 class="text-lg font-semibold text-gray-900 mb-2">Relationships</h2>
+
+  <% {
+       "Parents" => person.parents, "Spouses" => person.spouses, "Children" => person.children
+     }.each do |label, members| %>
+    <div class="mb-3">
+      <h3 class="text-sm font-medium text-gray-500"><%= label %></h3>
+      <% if members.any? %>
+        <ul class="mt-1 space-y-1">
+          <% members.each do |member| %>
+            <li class="flex items-center justify-between bg-white rounded-md border border-gray-200 px-3 py-1.5">
+              <%= link_to member.name, member, class: "text-gray-800 hover:text-indigo-600" %>
+              <% rel = relationship_between(person, member) %>
+              <% if rel %>
+                <%= button_to "Unlink", relationship_path(rel, person_id: person.id), method: :delete,
+                      class: "text-xs text-red-600 hover:underline",
+                      form: { data: { turbo_confirm: "Remove this link?" } } %>
+              <% end %>
+            </li>
+          <% end %>
+        </ul>
+      <% else %>
+        <p class="text-sm text-gray-400">None</p>
+      <% end %>
+    </div>
+  <% end %>
+
+  <% others = Person.where.not(id: person.id).order(:name) %>
+  <% if others.any? %>
+    <%= form_with url: relationships_path, method: :post, class: "mt-3 flex flex-wrap items-end gap-2" do %>
+      <%= hidden_field_tag :person_id, person.id %>
+      <div>
+        <label class="block text-xs text-gray-500">Relation</label>
+        <%= select_tag :relation, options_for_select([ %w[Parent parent], %w[Child child], %w[Spouse spouse] ]),
+              class: "rounded-md border-gray-300 text-sm" %>
+      </div>
+      <div>
+        <label class="block text-xs text-gray-500">Person</label>
+        <%= select_tag :related_person_id, options_from_collection_for_select(others, :id, :name),
+              class: "rounded-md border-gray-300 text-sm" %>
+      </div>
+      <%= submit_tag "Link", class: "px-3 py-1.5 rounded-md bg-indigo-600 text-white text-sm hover:bg-indigo-700 cursor-pointer" %>
+    <% end %>
+  <% end %>
+</section>

@@ -11,6 +11,14 @@ module PeopleHelper
     end
   end
 
+  # The relationship record linking two people (either direction), for unlinking.
+  def relationship_between(person_a, person_b)
+    Relationship
+      .where(from_person: person_a, to_person: person_b)
+      .or(Relationship.where(from_person: person_b, to_person: person_a))
+      .first
+  end
+
   def life_span(person)
     return nil if person.birth_date.blank? && person.death_date.blank?
 

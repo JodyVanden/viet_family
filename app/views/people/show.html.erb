@@ -15,6 +15,8 @@
     </div>
   </div>
 
+  <%= render "relationships", person: @person %>
+
   <section class="mt-6">
     <h2 class="text-lg font-semibold text-gray-900 mb-2">Stories &amp; notes</h2>
     <% if @notes.any? %>

@@ -10,6 +10,7 @@ Rails.application.routes.draw do
   # get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
   resources :people
+  resources :relationships, only: %i[create destroy]
 
   # Defines the root path route ("/")
   root "people#index"
