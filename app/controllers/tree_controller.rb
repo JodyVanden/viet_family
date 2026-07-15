@@ -9,22 +9,36 @@ class TreeController < ApplicationController
 
     @parent_edges = relationships.select { |r| r.kind == "parent" }.map { |r| [ r.from_person_id, r.to_person_id ] }
     @spouse_edges = relationships.select { |r| r.kind == "spouse" }.map { |r| [ r.from_person_id, r.to_person_id ] }
-    @levels = generation_levels(@people, @parent_edges)
+    @levels = generation_levels(@people, @parent_edges, @spouse_edges)
     @terms = terms_matrix(@people, @tree)
   end
 
   private
 
-  # Longest-path generation for each person (roots = 0), used for vertical layout.
-  def generation_levels(people, parent_edges)
+  # Generation for each person: longest ancestry path (roots = 0), with married-in
+  # spouses pulled to their partner's generation. Iterated to a fixpoint so both
+  # constraints (a child is below its parents; spouses share a level) hold.
+  def generation_levels(people, parent_edges, spouse_edges)
+    ids = people.map(&:id)
     parents_of = Hash.new { |h, k| h[k] = [] }
     parent_edges.each { |parent, child| parents_of[child] << parent }
+    level = Hash.new(0)
 
-    memo = {}
-    level = lambda do |id|
-      memo[id] ||= parents_of[id].empty? ? 0 : parents_of[id].map { |p| level.call(p) }.max + 1
+    (ids.size + 2).times do
+      changed = false
+      ids.each do |id|
+        want = [ level[id], parents_of[id].map { |p| level[p] + 1 }.max || 0 ].max
+        (level[id] = want) && (changed = true) if want != level[id]
+      end
+      spouse_edges.each do |a, b|
+        shared = [ level[a], level[b] ].max
+        (level[a] = shared) && (changed = true) if level[a] != shared
+        (level[b] = shared) && (changed = true) if level[b] != shared
+      end
+      break unless changed
     end
-    people.to_h { |p| [ p.id, level.call(p.id) ] }
+
+    people.to_h { |p| [ p.id, level[p.id] ] }
   end
 
   # { viewer_id => { target_id => term } } for every ordered pair of people.
