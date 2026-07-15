@@ -1,0 +1,6 @@
+<li id="<%= dom_id(note) %>" class="flex items-start justify-between bg-white rounded-md border border-gray-200 p-3">
+  <div class="text-gray-800"><%= simple_format(note.body) %></div>
+  <%= button_to "Delete", note_path(note), method: :delete,
+        class: "shrink-0 ml-3 text-xs text-red-600 hover:underline",
+        form: { data: { turbo_confirm: "Delete this note?" } } %>
+</li>

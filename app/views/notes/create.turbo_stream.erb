@@ -1,0 +1,6 @@
+<%= turbo_stream.prepend "notes-list" do %>
+  <%= render @note %>
+<% end %>
+<%= turbo_stream.update "note-form" do %>
+  <%= render "notes/form", person: @person %>
+<% end %>

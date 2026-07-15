@@ -19,14 +19,9 @@
 
   <section class="mt-6">
     <h2 class="text-lg font-semibold text-gray-900 mb-2">Stories &amp; notes</h2>
-    <% if @notes.any? %>
-      <ul class="space-y-2">
-        <% @notes.each do |note| %>
-          <li class="bg-white rounded-md border border-gray-200 p-3 text-gray-800"><%= simple_format(note.body) %></li>
-        <% end %>
-      </ul>
-    <% else %>
-      <p class="text-gray-500 text-sm">No notes yet.</p>
-    <% end %>
+    <div class="mb-3"><%= render "notes/form", person: @person %></div>
+    <ul id="notes-list" class="space-y-2">
+      <%= render @notes %>
+    </ul>
   </section>
 </div>

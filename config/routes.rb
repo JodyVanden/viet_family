@@ -11,6 +11,7 @@ Rails.application.routes.draw do
 
   resources :people
   resources :relationships, only: %i[create destroy]
+  resources :notes, only: %i[create destroy]
 
   # Defines the root path route ("/")
   root "people#index"

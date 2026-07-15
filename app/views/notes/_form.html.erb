@@ -1,0 +1,6 @@
+<%= form_with url: notes_path, scope: :note, id: "note-form", class: "flex gap-2 items-start" do |f| %>
+  <%= hidden_field_tag :person_id, person.id %>
+  <%= f.text_area :body, rows: 2, placeholder: "Add a story or note…",
+        class: "flex-1 rounded-md border-gray-300 shadow-sm text-sm" %>
+  <%= f.submit "Add note", class: "px-3 py-1.5 rounded-md bg-indigo-600 text-white text-sm hover:bg-indigo-700 cursor-pointer" %>
+<% end %>
