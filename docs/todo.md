@@ -31,8 +31,8 @@ minimally, refactor, verify, then commit (ask first). Check off only after tests
 ## P3 — Versioned JSON contract
 - [x] **T3.1** `Family::Exporter` → versioned JSON (decide portrait encoding)
 - [x] **T3.2** `Family::Importer` ← JSON + version validation + round-trip spec
-- [ ] **T3.3** Rake tasks `family:export` / `family:import`
-- [ ] **C3** Checkpoint: round-trip identical, terms unchanged — commit
+- [x] **T3.3** Rake tasks `family:export` / `family:import`
+- [x] **C3** Checkpoint: round-trip identical, terms unchanged — commit
 
 ## P4 — UI (Hotwire, vertical slices)
 - [ ] **T4.1** People index + show (portrait/placeholder) + system test
