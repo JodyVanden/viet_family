@@ -21,7 +21,7 @@ minimally, refactor, verify, then commit (ask first). Check off only after tests
 
 ## P2 — Persistence & graph adapter
 - [x] **T2.1** `Person` model + migration + factory + validations
-- [ ] **T2.2** `Relationship` self-join (parent/spouse) + migration + validations (no cycles/dupes)
+- [x] **T2.2** `Relationship` self-join (parent/spouse) + migration + validations (no cycles/dupes)
 - [ ] **T2.3** `Note` model + factory
 - [ ] **T2.4** Portrait via Active Storage + content-type/size validation
 - [ ] **T2.5** Graph adapter: AR records → `Kinship::Graph` (reuse engine); end-to-end term spec
