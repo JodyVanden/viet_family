@@ -4,8 +4,8 @@ Ordered, atomic, TDD tasks from `docs/plan.md`. Each: write failing test(s) firs
 minimally, refactor, verify, then commit (ask first). Check off only after tests pass.
 
 ## P0 — Foundation
-- [ ] **T0.1** Scaffold Rails 8.1 app (PostgreSQL, Propshaft, importmap, Tailwind) + RSpec, FactoryBot, rubocop-rails-omakase; smoke spec green
-- [ ] **C0** Checkpoint: `bin/dev` boots, `bundle exec rspec` + `bin/rubocop` green — commit
+- [x] **T0.1** Scaffold Rails 8.1 app (PostgreSQL, Propshaft, importmap, Tailwind) + RSpec, FactoryBot, rubocop-rails-omakase; smoke spec green
+- [x] **C0** Checkpoint: `bin/dev` boots, `bundle exec rspec` + `bin/rubocop` green — commit
 
 ## P1 — Kinship engine (pure Ruby, no DB) — highest risk
 - [ ] **T1.1** Fixture family + `kinship_vectors.json` + golden-vector RSpec harness (red baseline)
