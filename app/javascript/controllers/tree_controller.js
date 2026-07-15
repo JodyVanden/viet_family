@@ -24,9 +24,30 @@ export default class extends Controller {
 
   connect() {
     this.buildGlobalIndexes()
+
+    // Lay out the WHOLE family once. Clicking a person never hides anyone — it
+    // only re-labels and highlights. Generations are anchored to one person so
+    // the layout is stable across clicks.
+    this.anchorId = this.defaultFocal()
+    this.nodes = this.allNodes
+    this.parentEdges = this.parentEdgesValue
+    this.spouseEdges = this.spouseEdgesValue
+
+    this.buildIndexes()
+    this.positions = new Map()
+    this.families = []
+    this.nodeEls = new Map()
+    this.placed = new Set()
+    this.cursorX = 0
+
     this.buildStage()
+    this.resetStage()
+    this.layout()
+    this.draw()
+    this.fitToView()
     this.setupPanZoom()
-    this.render(this.defaultFocal())
+    this.applyTransform()
+    this.highlightPerson(this.anchorId)
   }
 
   // ---- global (unfiltered) indexes ---------------------------------------
@@ -55,74 +76,7 @@ export default class extends Controller {
     return (rich || both || this.allNodes[0] || {}).id
   }
 
-  // People shown when centred on `focal`: the focal person's extended family,
-  // organised so paternal and maternal branches stay on their own side.
-  // Grandparents; parents and their siblings (aunts/uncles) with spouses;
-  // cousins; the focal person, siblings and spouse (+ in-law parents); nieces/
-  // nephews; children (+ their spouses) and grandchildren.
-  visibleSet(focal) {
-    const V = new Set([ focal ])
-    const get = (m, k) => m.get(k) || []
-    const addSpouses = (id) => get(this.allSpouseOf, id).forEach((s) => V.add(s))
-
-    get(this.allParentsOf, focal).forEach((parent) => {
-      V.add(parent)
-      addSpouses(parent)
-      get(this.allParentsOf, parent).forEach((gp) => {
-        V.add(gp)
-        // aunts/uncles (grandparents' children) with spouses, and their cousins
-        get(this.allChildrenOf, gp).forEach((auncle) => {
-          V.add(auncle)
-          addSpouses(auncle)
-          get(this.allChildrenOf, auncle).forEach((cousin) => V.add(cousin))
-        })
-      })
-      // siblings and their children (nieces/nephews)
-      get(this.allChildrenOf, parent).forEach((sib) => {
-        V.add(sib)
-        get(this.allChildrenOf, sib).forEach((nn) => V.add(nn))
-      })
-    })
-
-    const spouses = get(this.allSpouseOf, focal)
-    spouses.forEach((sp) => {
-      V.add(sp)
-      get(this.allParentsOf, sp).forEach((ip) => V.add(ip))
-    })
-
-    const kids = new Set()
-    ;[ focal, ...spouses ].forEach((id) => get(this.allChildrenOf, id).forEach((k) => { V.add(k); kids.add(k) }))
-    kids.forEach((k) => { addSpouses(k); get(this.allChildrenOf, k).forEach((gk) => V.add(gk)) })
-    return V
-  }
-
-  // ---- render a focus -----------------------------------------------------
-
-  render(focalId) {
-    if (focalId == null) return
-    this.focalId = focalId
-    const visible = this.visibleSet(focalId)
-
-    this.nodes = this.allNodes.filter((n) => visible.has(n.id))
-    this.parentEdges = this.parentEdgesValue.filter(([ p, c ]) => visible.has(p) && visible.has(c))
-    this.spouseEdges = this.spouseEdgesValue.filter(([ a, b ]) => visible.has(a) && visible.has(b))
-
-    this.buildIndexes()
-    this.positions = new Map()
-    this.families = []
-    this.nodeEls = new Map()
-    this.placed = new Set()
-    this.cursorX = 0
-
-    this.resetStage()
-    this.layout()
-    this.draw()
-    this.applyLabels(focalId)
-    this.fitToView()
-    this.applyTransform()
-  }
-
-  // ---- per-focus indexes --------------------------------------------------
+  // ---- indexes ------------------------------------------------------------
 
   buildIndexes() {
     const C = this.constructor
@@ -159,8 +113,8 @@ export default class extends Controller {
   // This aligns same-generation relatives (e.g. a parent and a parent-in-law)
   // regardless of how deep either side's ancestry is shown.
   computeLevels() {
-    const gen = new Map([ [ this.focalId, 0 ] ])
-    const queue = [ this.focalId ]
+    const gen = new Map([ [ this.anchorId, 0 ] ])
+    const queue = [ this.anchorId ]
     while (queue.length) {
       const cur = queue.shift()
       const g = gen.get(cur)
@@ -404,14 +358,16 @@ export default class extends Controller {
     term.style.cssText = "font-size:12px;color:#4f46e5;min-height:16px;"
 
     card.append(avatar, name, term)
-    card.addEventListener("click", (e) => { e.stopPropagation(); this.render(n.id) })
+    card.addEventListener("click", (e) => { e.stopPropagation(); this.highlightPerson(n.id) })
     this.world.appendChild(card)
     this.nodeEls.set(n.id, card)
   }
 
   // ---- labels & lineage highlight ----------------------------------------
 
-  applyLabels(focalId) {
+  // Re-label everyone from `focalId`'s perspective and bold their blood line.
+  // Nobody is added or removed — the layout stays put.
+  highlightPerson(focalId) {
     const C = this.constructor
     const terms = this.termsValue[focalId] || {}
     this.nodeEls.forEach((card, nodeId) => {
@@ -425,7 +381,7 @@ export default class extends Controller {
     const hint = document.getElementById("viewpoint-hint")
     if (hint) {
       const self = this.nodeById.get(focalId)
-      hint.textContent = `Centred on ${self ? self.name : ""} — click anyone to re-centre the tree on them.`
+      hint.textContent = `Showing how ${self ? self.name : ""} addresses everyone — click anyone to switch.`
     }
   }
 
