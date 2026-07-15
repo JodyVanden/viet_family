@@ -44,5 +44,5 @@ minimally, refactor, verify, then commit (ask first). Check off only after tests
 - [x] **C4** Checkpoint: full create→link→portrait→tree→viewpoint flow works — commit
 
 ## P5 — Ship
-- [ ] **T5.1** README/quickstart, docs sync, /review, /code-simplify, final rubocop, demo seed
-- [ ] **C5** Checkpoint: Phase-1 acceptance met — commit
+- [x] **T5.1** README/quickstart, docs sync, /review, /code-simplify, final rubocop, demo seed
+- [x] **C5** Checkpoint: Phase-1 acceptance met — commit
