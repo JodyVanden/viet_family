@@ -29,7 +29,7 @@ minimally, refactor, verify, then commit (ask first). Check off only after tests
 - [x] **C2** Checkpoint: seeded DB computes correct term via adapter+engine — commit
 
 ## P3 — Versioned JSON contract
-- [ ] **T3.1** `Family::Exporter` → versioned JSON (decide portrait encoding)
+- [x] **T3.1** `Family::Exporter` → versioned JSON (decide portrait encoding)
 - [ ] **T3.2** `Family::Importer` ← JSON + version validation + round-trip spec
 - [ ] **T3.3** Rake tasks `family:export` / `family:import`
 - [ ] **C3** Checkpoint: round-trip identical, terms unchanged — commit
