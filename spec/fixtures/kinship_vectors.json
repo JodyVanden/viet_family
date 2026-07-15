@@ -7,6 +7,12 @@
     { "viewer": "me", "target": "ong_noi",   "term": "Ông nội" },
     { "viewer": "me", "target": "ba_noi",    "term": "Bà nội" },
     { "viewer": "me", "target": "ong_ngoai", "term": "Ông ngoại" },
-    { "viewer": "me", "target": "ba_ngoai",  "term": "Bà ngoại" }
+    { "viewer": "me", "target": "ba_ngoai",  "term": "Bà ngoại" },
+
+    { "viewer": "me", "target": "anh",    "term": "Anh" },
+    { "viewer": "me", "target": "chi",    "term": "Chị" },
+    { "viewer": "me", "target": "em_gai", "term": "Em" },
+    { "viewer": "em_gai", "target": "me",  "term": "Anh" },
+    { "viewer": "chi", "target": "em_gai", "term": "Em" }
   ]
 }

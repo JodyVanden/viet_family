@@ -20,6 +20,9 @@ module Kinship
       grandparent = grandparent_term(viewer_id, target)
       return grandparent if grandparent
 
+      sibling = sibling_term(viewer, target)
+      return sibling if sibling
+
       # Fallback: no known term — use the person's own name.
       target.name
     end
@@ -28,6 +31,17 @@ module Kinship
 
     def parent?(viewer_id, target)
       @graph.parents(viewer_id).include?(target.id)
+    end
+
+    # Anh/Chị (older) by gender, or Em (younger); nil if not a sibling.
+    def sibling_term(viewer, target)
+      return nil unless @graph.siblings(viewer.id).include?(target.id)
+
+      if Kinship.seniority(target, viewer) == :older
+        target.male? ? "Anh" : "Chị"
+      else
+        "Em"
+      end
     end
 
     # Ông/Bà nội (paternal) or ngoại (maternal), or nil if not a grandparent.
