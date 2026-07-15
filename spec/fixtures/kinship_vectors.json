@@ -1,0 +1,5 @@
+{
+  "_comment": "Golden vectors: language-agnostic ground truth for the kinship engine. Each case: from `viewer`, the person `target` is called `term` (Southern dialect). The Ruby engine must pass all of these; any future implementation (mobile) must pass the SAME file. Cases are added as each relationship family is implemented.",
+  "dialect": "southern",
+  "cases": []
+}

@@ -1,0 +1,74 @@
+{
+  "_comment": "Canonical sample family for the kinship engine. Language-agnostic. Viewpoint 'me' (and 'son') drive the golden vectors in kinship_vectors.json.",
+  "people": [
+    { "id": "ong_noi",     "name": "Ông Nội",      "gender": "male",   "birth_date": "1930-03-10", "birth_order": 1 },
+    { "id": "ba_noi",      "name": "Bà Nội",       "gender": "female", "birth_date": "1933-06-15", "birth_order": 1 },
+    { "id": "ong_ngoai",   "name": "Ông Ngoại",    "gender": "male",   "birth_date": "1932-02-20", "birth_order": 1 },
+    { "id": "ba_ngoai",    "name": "Bà Ngoại",     "gender": "female", "birth_date": "1935-09-05", "birth_order": 1 },
+
+    { "id": "bac_trai",    "name": "Bác Trai",     "gender": "male",   "birth_date": "1955-01-10", "birth_order": 1 },
+    { "id": "father",      "name": "Ba",           "gender": "male",   "birth_date": "1958-07-22", "birth_order": 2 },
+    { "id": "chu",         "name": "Chú",          "gender": "male",   "birth_date": "1961-04-18", "birth_order": 3 },
+    { "id": "co",          "name": "Cô",           "gender": "female", "birth_date": "1964-11-30", "birth_order": 4 },
+    { "id": "thim",        "name": "Thím",         "gender": "female", "birth_date": "1963-02-02", "birth_order": 1 },
+    { "id": "duong_co",    "name": "Dượng (Cô)",   "gender": "male",   "birth_date": "1962-12-12", "birth_order": 1 },
+
+    { "id": "mother",      "name": "Má",           "gender": "female", "birth_date": "1960-05-14", "birth_order": 1 },
+    { "id": "cau",         "name": "Cậu",          "gender": "male",   "birth_date": "1963-08-08", "birth_order": 2 },
+    { "id": "di",          "name": "Dì",           "gender": "female", "birth_date": "1966-03-25", "birth_order": 3 },
+    { "id": "mo",          "name": "Mợ",           "gender": "female", "birth_date": "1964-06-06", "birth_order": 1 },
+    { "id": "duong_di",    "name": "Dượng (Dì)",   "gender": "male",   "birth_date": "1965-07-07", "birth_order": 1 },
+
+    { "id": "anh",         "name": "Anh",          "gender": "male",   "birth_date": "1980-02-01", "birth_order": 1 },
+    { "id": "chi",         "name": "Chị",          "gender": "female", "birth_date": "1983-05-05", "birth_order": 2 },
+    { "id": "me",          "name": "Tôi",          "gender": "male",   "birth_date": "1985-09-09", "birth_order": 3 },
+    { "id": "em_gai",      "name": "Em Gái",       "gender": "female", "birth_date": "1988-12-12", "birth_order": 4 },
+
+    { "id": "wife",        "name": "Vợ",           "gender": "female", "birth_date": "1986-04-04", "birth_order": 1 },
+    { "id": "wife_father", "name": "Ba Vợ",        "gender": "male",   "birth_date": "1958-03-03", "birth_order": 1 },
+    { "id": "wife_mother", "name": "Má Vợ",        "gender": "female", "birth_date": "1961-10-10", "birth_order": 1 },
+
+    { "id": "cousin_bac",  "name": "Anh Họ",       "gender": "male",   "birth_date": "1982-01-01", "birth_order": 1 },
+    { "id": "cousin_chu",  "name": "Em Họ",        "gender": "male",   "birth_date": "1990-01-01", "birth_order": 1 },
+
+    { "id": "son",         "name": "Con Trai",     "gender": "male",   "birth_date": "2010-01-01", "birth_order": 1 },
+    { "id": "daughter",    "name": "Con Gái",      "gender": "female", "birth_date": "2013-01-01", "birth_order": 2 },
+    { "id": "niece",       "name": "Cháu Gái",     "gender": "female", "birth_date": "2008-01-01", "birth_order": 1 }
+  ],
+  "parents": [
+    { "child": "bac_trai", "parent": "ong_noi" }, { "child": "bac_trai", "parent": "ba_noi" },
+    { "child": "father",   "parent": "ong_noi" }, { "child": "father",   "parent": "ba_noi" },
+    { "child": "chu",      "parent": "ong_noi" }, { "child": "chu",      "parent": "ba_noi" },
+    { "child": "co",       "parent": "ong_noi" }, { "child": "co",       "parent": "ba_noi" },
+
+    { "child": "mother",   "parent": "ong_ngoai" }, { "child": "mother", "parent": "ba_ngoai" },
+    { "child": "cau",      "parent": "ong_ngoai" }, { "child": "cau",    "parent": "ba_ngoai" },
+    { "child": "di",       "parent": "ong_ngoai" }, { "child": "di",     "parent": "ba_ngoai" },
+
+    { "child": "anh",      "parent": "father" }, { "child": "anh",     "parent": "mother" },
+    { "child": "chi",      "parent": "father" }, { "child": "chi",     "parent": "mother" },
+    { "child": "me",       "parent": "father" }, { "child": "me",      "parent": "mother" },
+    { "child": "em_gai",   "parent": "father" }, { "child": "em_gai",  "parent": "mother" },
+
+    { "child": "wife",     "parent": "wife_father" }, { "child": "wife", "parent": "wife_mother" },
+
+    { "child": "cousin_bac", "parent": "bac_trai" },
+    { "child": "cousin_chu", "parent": "chu" }, { "child": "cousin_chu", "parent": "thim" },
+
+    { "child": "son",      "parent": "me" }, { "child": "son",      "parent": "wife" },
+    { "child": "daughter", "parent": "me" }, { "child": "daughter", "parent": "wife" },
+
+    { "child": "niece",    "parent": "anh" }
+  ],
+  "spouses": [
+    { "a": "ong_noi",     "b": "ba_noi" },
+    { "a": "ong_ngoai",   "b": "ba_ngoai" },
+    { "a": "father",      "b": "mother" },
+    { "a": "chu",         "b": "thim" },
+    { "a": "co",          "b": "duong_co" },
+    { "a": "cau",         "b": "mo" },
+    { "a": "di",          "b": "duong_di" },
+    { "a": "me",          "b": "wife" },
+    { "a": "wife_father", "b": "wife_mother" }
+  ]
+}

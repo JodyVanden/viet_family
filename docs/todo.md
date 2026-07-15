@@ -8,7 +8,7 @@ minimally, refactor, verify, then commit (ask first). Check off only after tests
 - [x] **C0** Checkpoint: `bin/dev` boots, `bundle exec rspec` + `bin/rubocop` green — commit
 
 ## P1 — Kinship engine (pure Ruby, no DB) — highest risk
-- [ ] **T1.1** Fixture family + `kinship_vectors.json` + golden-vector RSpec harness (red baseline)
+- [x] **T1.1** Fixture family + `kinship_vectors.json` + golden-vector RSpec harness (red baseline)
 - [ ] **T1.2** `Kinship::Graph` — siblings/children derivation, spouse edges, shortest-path
 - [ ] **T1.3** `Kinship.senior?` — birth_date → birth_order → unknown precedence
 - [ ] **T1.4** Terms: grandparents & parents (Ông/Bà nội·ngoại, Ba/Má)
