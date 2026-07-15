@@ -55,25 +55,44 @@ export default class extends Controller {
     return (rich || both || this.allNodes[0] || {}).id
   }
 
-  // People shown when centred on `focal`: parents & grandparents, siblings,
-  // spouse & the spouse's parents (in-laws), children, and grandchildren.
+  // People shown when centred on `focal`: the focal person's extended family,
+  // organised so paternal and maternal branches stay on their own side.
+  // Grandparents; parents and their siblings (aunts/uncles) with spouses;
+  // cousins; the focal person, siblings and spouse (+ in-law parents); nieces/
+  // nephews; children (+ their spouses) and grandchildren.
   visibleSet(focal) {
     const V = new Set([ focal ])
-    const get = (m, k) => m.get(k) || [];
+    const get = (m, k) => m.get(k) || []
+    const addSpouses = (id) => get(this.allSpouseOf, id).forEach((s) => V.add(s))
 
-    (get(this.allParentsOf, focal)).forEach((p) => {
-      V.add(p)
-      get(this.allParentsOf, p).forEach((gp) => V.add(gp))
-      get(this.allChildrenOf, p).forEach((sib) => V.add(sib))
+    get(this.allParentsOf, focal).forEach((parent) => {
+      V.add(parent)
+      addSpouses(parent)
+      get(this.allParentsOf, parent).forEach((gp) => {
+        V.add(gp)
+        // aunts/uncles (grandparents' children) with spouses, and their cousins
+        get(this.allChildrenOf, gp).forEach((auncle) => {
+          V.add(auncle)
+          addSpouses(auncle)
+          get(this.allChildrenOf, auncle).forEach((cousin) => V.add(cousin))
+        })
+      })
+      // siblings and their children (nieces/nephews)
+      get(this.allChildrenOf, parent).forEach((sib) => {
+        V.add(sib)
+        get(this.allChildrenOf, sib).forEach((nn) => V.add(nn))
+      })
     })
+
     const spouses = get(this.allSpouseOf, focal)
     spouses.forEach((sp) => {
       V.add(sp)
       get(this.allParentsOf, sp).forEach((ip) => V.add(ip))
     })
+
     const kids = new Set()
     ;[ focal, ...spouses ].forEach((id) => get(this.allChildrenOf, id).forEach((k) => { V.add(k); kids.add(k) }))
-    kids.forEach((k) => get(this.allChildrenOf, k).forEach((gk) => V.add(gk)))
+    kids.forEach((k) => { addSpouses(k); get(this.allChildrenOf, k).forEach((gk) => V.add(gk)) })
     return V
   }
 
@@ -164,7 +183,11 @@ export default class extends Controller {
     const keys = b ? [ [ a, b ].sort().join("-"), String(a), String(b) ] : [ String(a) ]
     const ids = []
     keys.forEach((k) => (this.childrenByKey.get(k) || []).forEach((c) => ids.push(c)))
-    return [ ...new Set(ids) ].sort((x, y) => this.orderIndex.get(x) - this.orderIndex.get(y))
+    // Childless siblings first (they cluster together), then the child whose own
+    // subtree spreads out — so aunts/uncles aren't split around it. Ties by age.
+    const hasKids = (id) => (this.childrenOfPerson.get(id) || []).length > 0
+    return [ ...new Set(ids) ].sort((x, y) =>
+      (hasKids(x) - hasKids(y)) || (this.orderIndex.get(x) - this.orderIndex.get(y)))
   }
 
   // ---- layout -------------------------------------------------------------
