@@ -1,0 +1,8 @@
+# IDE / editor
+/.idea/
+
+# Tooling
+/.serena/
+
+# OS
+.DS_Store
