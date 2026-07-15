@@ -42,3 +42,4 @@
 
 # OS
 .DS_Store
+/coverage/

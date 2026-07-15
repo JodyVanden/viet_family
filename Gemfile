@@ -55,6 +55,9 @@ group :development, :test do
   # Testing: RSpec + FactoryBot
   gem "rspec-rails"
   gem "factory_bot_rails"
+
+  # Test coverage
+  gem "simplecov", require: false
 end
 
 group :development do

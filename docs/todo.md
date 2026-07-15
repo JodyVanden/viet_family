@@ -16,8 +16,8 @@ minimally, refactor, verify, then commit (ask first). Check off only after tests
 - [x] **T1.6** Terms: parent's siblings (bác/chú/cô/cậu/dì + thím/mợ/dượng; all father's sisters = Cô)
 - [x] **T1.7** Terms: spouse & parents-in-law (chồng/vợ, Ba/Má vợ·chồng) — driving perspective case
 - [x] **T1.8** Terms: descendants, cousins, unknown fallback (con/cháu, họ, plain-name)
-- [ ] **T1.9** Harden: full vector suite green, ~100% coverage, engine framework-free
-- [ ] **C1** Checkpoint: golden suite green, coverage met, no Rails deps — commit
+- [x] **T1.9** Harden: full vector suite green, ~100% coverage, engine framework-free
+- [x] **C1** Checkpoint: golden suite green, coverage met, no Rails deps — commit
 
 ## P2 — Persistence & graph adapter
 - [ ] **T2.1** `Person` model + migration + factory + validations
