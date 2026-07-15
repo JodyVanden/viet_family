@@ -39,7 +39,7 @@ minimally, refactor, verify, then commit (ask first). Check off only after tests
 - [x] **T4.2** New/edit person (Turbo form) + portrait upload + system test
 - [x] **T4.3** Relationships UI (link parent/child/spouse) + system test
 - [x] **T4.4** Notes CRUD per person (Turbo Streams) + system test
-- [ ] **T4.5** Tree visualization (importmap tree lib + Stimulus, portraits, pan/zoom) + system test
+- [x] **T4.5** Tree visualization (importmap tree lib + Stimulus, portraits, pan/zoom) + system test
 - [ ] **T4.6** Viewpoint selection (headline) — relabel all nodes; assert Ba vợ vs Ông ngoại + system test
 - [ ] **C4** Checkpoint: full create→link→portrait→tree→viewpoint flow works — commit
 

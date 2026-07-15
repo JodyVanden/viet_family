@@ -1,0 +1,23 @@
+<div class="p-6">
+  <div class="max-w-6xl mx-auto flex items-center justify-between mb-4">
+    <h1 class="text-2xl font-bold text-gray-900">Family tree</h1>
+    <%= link_to "← Family list", people_path, class: "text-sm text-indigo-600" %>
+  </div>
+
+  <% if @people.any? %>
+    <p id="viewpoint-hint" class="max-w-6xl mx-auto text-sm text-gray-500 mb-2">
+      Click a person to see how everyone else is named from their point of view.
+    </p>
+    <div
+      class="max-w-6xl mx-auto border border-gray-200 rounded-lg bg-white overflow-hidden"
+      style="height: 70vh;"
+      data-controller="tree"
+      data-tree-nodes-value="<%= tree_nodes_json(@people, @levels) %>"
+      data-tree-parent-edges-value="<%= @parent_edges.to_json %>"
+      data-tree-spouse-edges-value="<%= @spouse_edges.to_json %>"
+      data-tree-terms-value="<%= @terms.to_json %>">
+    </div>
+  <% else %>
+    <p class="max-w-6xl mx-auto text-gray-500">No people yet. <%= link_to "Add someone", new_person_path, class: "text-indigo-600" %>.</p>
+  <% end %>
+</div>

@@ -2,7 +2,7 @@
 require 'simplecov'
 SimpleCov.start 'rails' do
   enable_coverage :branch
-  add_group 'Kinship engine', 'app/kinship'
+  group 'Kinship engine', 'app/kinship'
 end
 
 require 'spec_helper'
