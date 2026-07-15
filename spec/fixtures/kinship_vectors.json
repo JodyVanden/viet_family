@@ -23,6 +23,16 @@
     { "viewer": "me", "target": "thim",     "term": "Thím" },
     { "viewer": "me", "target": "mo",       "term": "Mợ" },
     { "viewer": "me", "target": "duong_co", "term": "Dượng" },
-    { "viewer": "me", "target": "duong_di", "term": "Dượng" }
+    { "viewer": "me", "target": "duong_di", "term": "Dượng" },
+
+    { "viewer": "me", "target": "wife", "term": "Vợ" },
+    { "viewer": "wife", "target": "me", "term": "Chồng" },
+    { "viewer": "me", "target": "wife_father", "term": "Ba vợ" },
+    { "viewer": "me", "target": "wife_mother", "term": "Má vợ" },
+
+    { "_comment": "Perspective: the same man is Ba vợ to me but Ông ngoại to my son.",
+      "viewer": "son", "target": "wife_father", "term": "Ông ngoại" },
+    { "viewer": "son", "target": "me", "term": "Ba" },
+    { "viewer": "son", "target": "father", "term": "Ông nội" }
   ]
 }

@@ -14,8 +14,12 @@ module Kinship
       viewer = @graph.person(viewer_id)
       target = @graph.person(target_id)
       return nil if viewer.nil? || target.nil?
+      return spouse_term(target) if @graph.spouses(viewer_id).include?(target.id)
       return @vocab[:father] if parent?(viewer_id, target) && target.male?
       return @vocab[:mother] if parent?(viewer_id, target) && target.female?
+
+      in_law = parent_in_law_term(viewer_id, target)
+      return in_law if in_law
 
       grandparent = grandparent_term(viewer_id, target)
       return grandparent if grandparent
@@ -34,6 +38,21 @@ module Kinship
 
     def parent?(viewer_id, target)
       @graph.parents(viewer_id).include?(target.id)
+    end
+
+    def spouse_term(target) = target.male? ? "Chồng" : "Vợ"
+
+    # Ba/Má vợ (spouse is a wife) or Ba/Má chồng (spouse is a husband) when the
+    # target is a parent of the viewer's spouse; nil otherwise.
+    def parent_in_law_term(viewer_id, target)
+      @graph.spouses(viewer_id).each do |spouse_id|
+        next unless @graph.parents(spouse_id).include?(target.id)
+
+        suffix = @graph.person(spouse_id).female? ? "vợ" : "chồng"
+        base = target.male? ? @vocab[:father] : @vocab[:mother]
+        return "#{base} #{suffix}"
+      end
+      nil
     end
 
     # Anh/Chị (older) by gender, or Em (younger); nil if not a sibling.
