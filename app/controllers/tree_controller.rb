@@ -3,7 +3,7 @@ class TreeController < ApplicationController
   # precomputed here with the Ruby engine (an N×N matrix) so the client only has
   # to look them up — the engine is never reimplemented in JavaScript.
   def show
-    @people = Person.order(:birth_date, :name).to_a
+    @people = Person.order(:birth_date, :name).with_attached_portrait.to_a
     relationships = Relationship.all.to_a
     @tree = Family::Tree.new(people: @people, relationships: relationships)
 

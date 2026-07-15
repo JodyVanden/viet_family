@@ -35,42 +35,5 @@ module Kinship
 
     def grandparents(id) = parents(id).flat_map { |p| parents(p) }.uniq
     def grandchildren(id) = children(id).flat_map { |c| children(c) }.uniq
-
-    # Shortest path (list of ids) between two people over parent/child/spouse
-    # edges, or nil if unreachable. Includes both endpoints; [id] when a == b.
-    def shortest_path(from, to)
-      return [ from ] if from == to
-
-      visited = { from => nil }
-      queue = [ from ]
-      until queue.empty?
-        current = queue.shift
-        neighbors(current).each do |nb|
-          next if visited.key?(nb)
-
-          visited[nb] = current
-          return build_path(visited, to) if nb == to
-
-          queue << nb
-        end
-      end
-      nil
-    end
-
-    private
-
-    def neighbors(id)
-      (parents(id) + children(id) + spouses(id)).uniq
-    end
-
-    def build_path(visited, to)
-      path = []
-      node = to
-      while node
-        path.unshift(node)
-        node = visited[node]
-      end
-      path
-    end
   end
 end

@@ -46,11 +46,33 @@ class Person < ApplicationRecord
   def portrait_is_a_reasonable_image
     return unless portrait.attached?
 
-    unless portrait.blob.content_type.in?(PORTRAIT_TYPES)
+    unless sniffed_portrait_type.in?(PORTRAIT_TYPES)
       errors.add(:portrait, "must be a PNG, JPEG, or WebP image")
     end
-    if portrait.blob.byte_size > MAX_PORTRAIT_BYTES
+    if portrait.blob.byte_size.to_i > MAX_PORTRAIT_BYTES
       errors.add(:portrait, "must be smaller than 5 MB")
+    end
+  end
+
+  # The real image type, detected from the file's magic bytes rather than the
+  # client-declared content type (which can be spoofed). Falls back to the blob's
+  # stored type when the pending upload isn't readable here.
+  def sniffed_portrait_type
+    io = pending_portrait_io
+    return portrait.blob.content_type unless io.respond_to?(:read)
+
+    io.rewind if io.respond_to?(:rewind)
+    Marcel::MimeType.for(io, name: portrait.filename.to_s)
+  ensure
+    io.rewind if io.respond_to?(:rewind)
+  end
+
+  def pending_portrait_io
+    attachable = attachment_changes["portrait"]&.attachable
+    case attachable
+    when ActionDispatch::Http::UploadedFile, Rack::Test::UploadedFile then attachable.tempfile
+    when Hash then attachable[:io]
+    when IO, StringIO then attachable
     end
   end
 end

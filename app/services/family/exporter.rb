@@ -14,7 +14,7 @@ module Family
       {
         "schema_version" => SCHEMA_VERSION,
         "dialect" => dialect.to_s,
-        "people" => Person.includes(:notes).order(:id).map { |p| person_hash(p) },
+        "people" => Person.includes(:notes).with_attached_portrait.order(:id).map { |p| person_hash(p) },
         "relationships" => Relationship.order(:id).map { |r| relationship_hash(r) }
       }
     end

@@ -2,7 +2,7 @@ class PeopleController < ApplicationController
   before_action :set_person, only: %i[show edit update destroy]
 
   def index
-    @people = Person.order(:birth_date, :name)
+    @people = Person.order(:birth_date, :name).with_attached_portrait
   end
 
   def show

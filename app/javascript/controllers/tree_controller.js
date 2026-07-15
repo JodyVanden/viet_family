@@ -70,10 +70,12 @@ export default class extends Controller {
   }
 
   defaultFocal() {
+    if (this.allNodes.length === 0) return null
+
     const hasGrandparents = (id) => (this.allParentsOf.get(id) || []).some((p) => this.allParentsOf.has(p))
     const rich = this.allNodes.find((n) => hasGrandparents(n.id) && this.allChildrenOf.has(n.id))
     const both = this.allNodes.find((n) => this.allParentsOf.has(n.id) && this.allChildrenOf.has(n.id))
-    return (rich || both || this.allNodes[0] || {}).id
+    return (rich || both || this.allNodes[0]).id
   }
 
   // ---- indexes ------------------------------------------------------------
@@ -440,16 +442,25 @@ export default class extends Controller {
       dragging = true; startX = e.clientX - this.tx; startY = e.clientY - this.ty
       this.element.style.cursor = "grabbing"
     })
-    window.addEventListener("pointermove", (e) => {
+    // Kept as bound references so disconnect() can remove them (Turbo reconnects
+    // this controller, and these live on window, not the element).
+    this.onPointerMove = (e) => {
       if (!dragging) return
       this.tx = e.clientX - startX; this.ty = e.clientY - startY; this.applyTransform()
-    })
-    window.addEventListener("pointerup", () => { dragging = false; this.element.style.cursor = "grab" })
+    }
+    this.onPointerUp = () => { dragging = false; this.element.style.cursor = "grab" }
+    window.addEventListener("pointermove", this.onPointerMove)
+    window.addEventListener("pointerup", this.onPointerUp)
     this.element.addEventListener("wheel", (e) => {
       e.preventDefault()
       this.scale = Math.min(2.5, Math.max(0.3, this.scale * (e.deltaY < 0 ? 1.1 : 0.9)))
       this.applyTransform()
     }, { passive: false })
+  }
+
+  disconnect() {
+    if (this.onPointerMove) window.removeEventListener("pointermove", this.onPointerMove)
+    if (this.onPointerUp) window.removeEventListener("pointerup", this.onPointerUp)
   }
 
   applyTransform() {

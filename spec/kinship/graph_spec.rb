@@ -37,18 +37,4 @@ RSpec.describe Kinship::Graph do
   it "returns grandchildren (children of children, not children)" do
     expect(graph.grandchildren(:father)).to contain_exactly(:son, :daughter, :niece)
   end
-
-  it "finds the shortest relationship path" do
-    expect(graph.shortest_path(:me, :me)).to eq([ :me ])
-    expect(graph.shortest_path(:me, :father)).to eq([ :me, :father ])
-    expect(graph.shortest_path(:me, :ong_noi)).to eq([ :me, :father, :ong_noi ])
-  end
-
-  it "returns nil for an unreachable person" do
-    isolated = Kinship::Person.new(id: :ghost, name: "Ghost")
-    g = Kinship::Graph.new(people: KinshipFixture.people + [ isolated ],
-                           parent_edges: KinshipFixture.parent_edges,
-                           spouse_edges: KinshipFixture.spouse_edges)
-    expect(g.shortest_path(:me, :ghost)).to be_nil
-  end
 end
