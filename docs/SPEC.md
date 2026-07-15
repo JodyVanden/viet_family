@@ -100,12 +100,11 @@ pass the *same* file. This is how the two implementations are prevented from dri
 | Paternal grandfather / grandmother | Ông nội / Bà nội |
 | Maternal grandfather / grandmother | Ông ngoại / Bà ngoại |
 | Father / Mother | Ba / Má |
-| Father's older sibling / their spouse | Bác |
+| Father's older brother / his wife | Bác / Bác gái |
 | Father's younger brother / his wife | Chú / Thím |
 | Father's sister (any age) / her husband | Cô / Dượng |
-| Mother's older sibling / their spouse | Bác |
-| Mother's brother / his wife | Cậu / Mợ |
-| Mother's younger sister / her husband | Dì / Dượng |
+| Mother's brother (any age) / his wife | Cậu / Mợ |
+| Mother's sister (any age) / her husband | Dì / Dượng |
 | Older brother / older sister | Anh / Chị |
 | Younger sibling | Em (em trai / em gái) |
 | Husband / Wife | Chồng / Vợ |
@@ -115,9 +114,11 @@ pass the *same* file. This is how the two implementations are prevented from dri
 | Cousin (extended, by age) | Anh/Chị/Em họ |
 
 **Known complexity handled deliberately:** terms are regional; the engine takes a
-`dialect` parameter, defaulting to Southern. Per project decision, **all father's sisters
-are Cô regardless of age** (no older-sister → Bác distinction on the paternal-female
-branch); seniority still governs bác vs. chú on the paternal-male branch and cậu/dì.
+`dialect` parameter, defaulting to Southern. The Southern rule resolves the historical
+North/Central overlap of "Bác" as follows: **Bác = father's *older brother* only**; his
+younger brother is Chú; **all father's sisters are Cô** regardless of age; and the maternal
+side has **no Bác** — every mother's brother is Cậu and every mother's sister is Dì. Thus
+seniority (`senior?`) only governs bác vs. chú on the paternal-male branch.
 
 ---
 

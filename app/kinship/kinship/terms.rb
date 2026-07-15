@@ -23,6 +23,9 @@ module Kinship
       sibling = sibling_term(viewer, target)
       return sibling if sibling
 
+      pibling = pibling_term(viewer_id, target)
+      return pibling if pibling
+
       # Fallback: no known term — use the person's own name.
       target.name
     end
@@ -54,6 +57,45 @@ module Kinship
       honorific = target.male? ? "Ông" : "Bà"
       "#{honorific} #{side}"
     end
+
+    # A parent's sibling (bác/chú/cô/cậu/dì) or their spouse (bác gái/thím/mợ/
+    # dượng), or nil. Southern rule: Bác = father's OLDER brother only; his
+    # younger brother is Chú; all father's sisters are Cô; all mother's brothers
+    # are Cậu and all her sisters Dì (no maternal Bác).
+    def pibling_term(viewer_id, target)
+      blood = blood_pibling_term(viewer_id, target)
+      return blood if blood
+
+      # Aunt/uncle by marriage: target is the spouse of a blood aunt/uncle.
+      @graph.spouses(target.id).each do |spouse_id|
+        base = blood_pibling_term(viewer_id, @graph.person(spouse_id))
+        return SPOUSE_OF_PIBLING[base] if base
+      end
+      nil
+    end
+
+    # Term for a person who is a blood sibling of the viewer's parent, else nil.
+    def blood_pibling_term(viewer_id, person)
+      father = @graph.father(viewer_id)
+      mother = @graph.mother(viewer_id)
+
+      if father && @graph.siblings(father).include?(person.id)
+        return "Cô" unless person.male?
+
+        Kinship.senior?(person, @graph.person(father)) ? "Bác" : "Chú"
+      elsif mother && @graph.siblings(mother).include?(person.id)
+        person.male? ? "Cậu" : "Dì"
+      end
+    end
+
+    # The term for the spouse of a blood aunt/uncle, keyed by that relative's term.
+    SPOUSE_OF_PIBLING = {
+      "Bác" => "Bác gái",
+      "Chú" => "Thím",
+      "Cô" => "Dượng",
+      "Cậu" => "Mợ",
+      "Dì" => "Dượng"
+    }.freeze
 
     def grandparent_side(viewer_id, grandparent_id)
       father = @graph.father(viewer_id)

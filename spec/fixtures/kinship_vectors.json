@@ -13,6 +13,16 @@
     { "viewer": "me", "target": "chi",    "term": "Chị" },
     { "viewer": "me", "target": "em_gai", "term": "Em" },
     { "viewer": "em_gai", "target": "me",  "term": "Anh" },
-    { "viewer": "chi", "target": "em_gai", "term": "Em" }
+    { "viewer": "chi", "target": "em_gai", "term": "Em" },
+
+    { "viewer": "me", "target": "bac_trai", "term": "Bác" },
+    { "viewer": "me", "target": "chu",      "term": "Chú" },
+    { "viewer": "me", "target": "co",       "term": "Cô" },
+    { "viewer": "me", "target": "cau",      "term": "Cậu" },
+    { "viewer": "me", "target": "di",       "term": "Dì" },
+    { "viewer": "me", "target": "thim",     "term": "Thím" },
+    { "viewer": "me", "target": "mo",       "term": "Mợ" },
+    { "viewer": "me", "target": "duong_co", "term": "Dượng" },
+    { "viewer": "me", "target": "duong_di", "term": "Dượng" }
   ]
 }
