@@ -52,20 +52,17 @@ export default class extends Controller {
 
   // ---- global (unfiltered) indexes ---------------------------------------
 
+  // Parent/child adjacency over the whole family, used to pick a sensible default
+  // focal person before the per-layout indexes are built.
   buildGlobalIndexes() {
     this.allNodes = this.nodesValue
     this.allParentsOf = new Map()
     this.allChildrenOf = new Map()
-    this.allSpouseOf = new Map()
     const push = (map, k, v) => map.set(k, [ ...(map.get(k) || []), v ])
 
     this.parentEdgesValue.forEach(([ parent, child ]) => {
       push(this.allParentsOf, child, parent)
       push(this.allChildrenOf, parent, child)
-    })
-    this.spouseEdgesValue.forEach(([ a, b ]) => {
-      push(this.allSpouseOf, a, b)
-      push(this.allSpouseOf, b, a)
     })
   }
 

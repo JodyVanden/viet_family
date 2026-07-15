@@ -41,10 +41,19 @@ class TreeController < ApplicationController
     people.to_h { |p| [ p.id, level[p.id] ] }
   end
 
-  # { viewer_id => { target_id => term } } for every ordered pair of people.
+  # { viewer_id => { target_id => term } } for every ordered pair that has a real
+  # kinship term. Pairs with no specific term are omitted (the client shows a
+  # blank), which keeps the payload small and avoids repeating a distant
+  # relative's name as its own "term".
   def terms_matrix(people, tree)
     people.to_h do |viewer|
-      [ viewer.id, people.reject { |t| t.id == viewer.id }.to_h { |t| [ t.id, tree.term_for(viewer, t) ] } ]
+      row = people.filter_map do |target|
+        next if target.id == viewer.id
+
+        term = tree.specific_term_for(viewer, target)
+        [ target.id, term ] if term
+      end
+      [ viewer.id, row.to_h ]
     end
   end
 end

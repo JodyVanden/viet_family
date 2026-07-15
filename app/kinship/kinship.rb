@@ -34,4 +34,10 @@ module Kinship
   def term(viewer:, target:, graph:, dialect: :southern)
     Terms.new(graph, dialect).term(viewer, target)
   end
+
+  # Like `term`, but returns nil (rather than the plain name) when no specific
+  # kinship term applies — so callers can omit meaningless entries.
+  def specific_term(viewer:, target:, graph:, dialect: :southern)
+    Terms.new(graph, dialect).specific_term(viewer, target)
+  end
 end

@@ -25,4 +25,14 @@ RSpec.describe "Kinship.term fallback" do
     expect(Kinship.term(viewer: :me, target: :nobody, graph: graph)).to be_nil
     expect(Kinship.term(viewer: :nobody, target: :me, graph: graph)).to be_nil
   end
+
+  describe "Kinship.specific_term" do
+    it "returns the term when one applies" do
+      expect(Kinship.specific_term(viewer: :me, target: :father, graph: graph)).to eq("Ba")
+    end
+
+    it "returns nil (not the plain name) when no term applies" do
+      expect(Kinship.specific_term(viewer: :son, target: :ong_ngoai, graph: graph)).to be_nil
+    end
+  end
 end

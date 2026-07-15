@@ -17,6 +17,11 @@ module Family
       Kinship.term(viewer: id_of(viewer), target: id_of(target), graph: @graph, dialect: @dialect)
     end
 
+    # The specific kinship term, or nil when there is none (no plain-name fallback).
+    def specific_term_for(viewer, target)
+      Kinship.specific_term(viewer: id_of(viewer), target: id_of(target), graph: @graph, dialect: @dialect)
+    end
+
     private
 
     def id_of(person_or_id) = person_or_id.respond_to?(:id) ? person_or_id.id : person_or_id

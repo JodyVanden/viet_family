@@ -9,8 +9,19 @@ module Kinship
       @vocab = Dialects.fetch(dialect)
     end
 
-    # Returns the term String, or nil if either person is unknown.
+    # The kinship term String, or the target's plain name when no term applies;
+    # nil if either person is unknown.
     def term(viewer_id, target_id)
+      target = @graph.person(target_id)
+      return nil if target.nil? || @graph.person(viewer_id).nil?
+
+      specific_term(viewer_id, target_id) || target.name
+    end
+
+    # The specific kinship term, or nil when there is none (unknown people or a
+    # distant/unclassified relationship). Callers wanting a display fallback use
+    # `term` instead.
+    def specific_term(viewer_id, target_id)
       viewer = @graph.person(viewer_id)
       target = @graph.person(target_id)
       return nil if viewer.nil? || target.nil?
@@ -33,11 +44,7 @@ module Kinship
       pibling = pibling_term(viewer_id, target)
       return pibling if pibling
 
-      cousin = cousin_term(viewer, target)
-      return cousin if cousin
-
-      # Fallback: no known term — use the person's own name.
-      target.name
+      cousin_term(viewer, target)
     end
 
     private
