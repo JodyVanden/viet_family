@@ -7,6 +7,7 @@ class Person < ApplicationRecord
            foreign_key: :from_person_id, dependent: :destroy, inverse_of: :from_person
   has_many :incoming_relationships, class_name: "Relationship",
            foreign_key: :to_person_id, dependent: :destroy, inverse_of: :to_person
+  has_many :notes, dependent: :destroy
 
   validates :name, presence: true
   validates :birth_order, numericality: { only_integer: true, greater_than: 0 }, allow_nil: true

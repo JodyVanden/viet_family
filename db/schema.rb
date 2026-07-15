@@ -10,9 +10,17 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_07_15_014418) do
+ActiveRecord::Schema[8.1].define(version: 2026_07_15_014724) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
+
+  create_table "notes", force: :cascade do |t|
+    t.text "body", null: false
+    t.datetime "created_at", null: false
+    t.bigint "person_id", null: false
+    t.datetime "updated_at", null: false
+    t.index ["person_id"], name: "index_notes_on_person_id"
+  end
 
   create_table "people", force: :cascade do |t|
     t.date "birth_date"
@@ -35,6 +43,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_07_15_014418) do
     t.index ["to_person_id"], name: "index_relationships_on_to_person_id"
   end
 
+  add_foreign_key "notes", "people"
   add_foreign_key "relationships", "people", column: "from_person_id"
   add_foreign_key "relationships", "people", column: "to_person_id"
 end
