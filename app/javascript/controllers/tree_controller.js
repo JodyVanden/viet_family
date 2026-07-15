@@ -257,6 +257,10 @@ export default class extends Controller {
   buildStage() {
     this.element.style.position = "relative"
     this.element.style.cursor = "grab"
+    // The tree is an interactive canvas — don't let panning/clicking select the
+    // node text.
+    this.element.style.userSelect = "none"
+    this.element.style.webkitUserSelect = "none"
     this.world = document.createElement("div")
     this.world.style.cssText = "position:absolute;top:0;left:0;transform-origin:0 0;"
     this.element.appendChild(this.world)
