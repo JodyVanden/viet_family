@@ -33,6 +33,13 @@
     { "_comment": "Perspective: the same man is Ba vợ to me but Ông ngoại to my son.",
       "viewer": "son", "target": "wife_father", "term": "Ông ngoại" },
     { "viewer": "son", "target": "me", "term": "Ba" },
-    { "viewer": "son", "target": "father", "term": "Ông nội" }
+    { "viewer": "son", "target": "father", "term": "Ông nội" },
+
+    { "viewer": "me", "target": "son",      "term": "Con" },
+    { "viewer": "me", "target": "daughter", "term": "Con" },
+    { "viewer": "father", "target": "son",  "term": "Cháu" },
+    { "viewer": "me", "target": "niece",    "term": "Cháu" },
+    { "viewer": "me", "target": "cousin_bac", "term": "Anh họ" },
+    { "viewer": "me", "target": "cousin_chu", "term": "Em họ" }
   ]
 }

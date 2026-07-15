@@ -21,6 +21,9 @@ module Kinship
       in_law = parent_in_law_term(viewer_id, target)
       return in_law if in_law
 
+      return "Con" if @graph.children(viewer_id).include?(target.id)
+      return "Cháu" if descendant?(viewer_id, target.id)
+
       grandparent = grandparent_term(viewer_id, target)
       return grandparent if grandparent
 
@@ -29,6 +32,9 @@ module Kinship
 
       pibling = pibling_term(viewer_id, target)
       return pibling if pibling
+
+      cousin = cousin_term(viewer, target)
+      return cousin if cousin
 
       # Fallback: no known term — use the person's own name.
       target.name
@@ -41,6 +47,28 @@ module Kinship
     end
 
     def spouse_term(target) = target.male? ? "Chồng" : "Vợ"
+
+    # Cháu covers both grandchildren and the children of one's siblings.
+    def descendant?(viewer_id, target_id)
+      return true if @graph.grandchildren(viewer_id).include?(target_id)
+
+      @graph.siblings(viewer_id).any? { |s| @graph.children(s).include?(target_id) }
+    end
+
+    # Anh/Chị họ (older) or Em họ (younger) for a cousin — the child of a parent's
+    # sibling; nil otherwise.
+    def cousin_term(viewer, target)
+      cousins = @graph.parents(viewer.id)
+                      .flat_map { |p| @graph.siblings(p) }
+                      .flat_map { |s| @graph.children(s) }
+      return nil unless cousins.include?(target.id)
+
+      if Kinship.seniority(target, viewer) == :older
+        target.male? ? "Anh họ" : "Chị họ"
+      else
+        "Em họ"
+      end
+    end
 
     # Ba/Má vợ (spouse is a wife) or Ba/Má chồng (spouse is a husband) when the
     # target is a parent of the viewer's spouse; nil otherwise.

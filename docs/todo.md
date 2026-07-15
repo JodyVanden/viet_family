@@ -15,7 +15,7 @@ minimally, refactor, verify, then commit (ask first). Check off only after tests
 - [x] **T1.5** Terms: siblings (anh/chị/em via senior?)
 - [x] **T1.6** Terms: parent's siblings (bác/chú/cô/cậu/dì + thím/mợ/dượng; all father's sisters = Cô)
 - [x] **T1.7** Terms: spouse & parents-in-law (chồng/vợ, Ba/Má vợ·chồng) — driving perspective case
-- [ ] **T1.8** Terms: descendants, cousins, unknown fallback (con/cháu, họ, plain-name)
+- [x] **T1.8** Terms: descendants, cousins, unknown fallback (con/cháu, họ, plain-name)
 - [ ] **T1.9** Harden: full vector suite green, ~100% coverage, engine framework-free
 - [ ] **C1** Checkpoint: golden suite green, coverage met, no Rails deps — commit
 
