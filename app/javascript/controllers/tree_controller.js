@@ -382,7 +382,17 @@ export default class extends Controller {
     const cy = pos.y + C.NODE_H / 2
     this.tx = this.element.clientWidth / 2 - cx * this.scale
     this.ty = this.element.clientHeight / 2 - cy * this.scale
+    this.animateTo()
+  }
 
+  // Zoom back out to frame the whole family (clicking the empty background).
+  resetView() {
+    this.fitToView()
+    this.animateTo()
+  }
+
+  // Apply the current transform with a brief glide.
+  animateTo() {
     this.world.style.transition = "transform 0.35s ease"
     this.applyTransform()
     clearTimeout(this.transitionTimer)
@@ -462,8 +472,13 @@ export default class extends Controller {
     let dragging = false
     let startX = 0
     let startY = 0
+    let downX = 0
+    let downY = 0
     this.element.addEventListener("pointerdown", (e) => {
-      dragging = true; startX = e.clientX - this.tx; startY = e.clientY - this.ty
+      dragging = true
+      this.dragMoved = false
+      startX = e.clientX - this.tx; startY = e.clientY - this.ty
+      downX = e.clientX; downY = e.clientY
       this.world.style.transition = "" // cancel any glide so dragging is immediate
       this.element.style.cursor = "grabbing"
     })
@@ -471,11 +486,18 @@ export default class extends Controller {
     // this controller, and these live on window, not the element).
     this.onPointerMove = (e) => {
       if (!dragging) return
+      if (Math.abs(e.clientX - downX) + Math.abs(e.clientY - downY) > 4) this.dragMoved = true
       this.tx = e.clientX - startX; this.ty = e.clientY - startY; this.applyTransform()
     }
     this.onPointerUp = () => { dragging = false; this.element.style.cursor = "grab" }
     window.addEventListener("pointermove", this.onPointerMove)
     window.addEventListener("pointerup", this.onPointerUp)
+
+    // Clicking the empty background (not a node, which stops propagation, and not
+    // the end of a pan) zooms back out to the whole family.
+    this.element.addEventListener("click", () => {
+      if (!this.dragMoved) this.resetView()
+    })
     this.element.addEventListener("wheel", (e) => {
       e.preventDefault()
       this.scale = Math.min(2.5, Math.max(0.3, this.scale * (e.deltaY < 0 ? 1.1 : 0.9)))
