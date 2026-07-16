@@ -14,6 +14,6 @@ Rails.application.routes.draw do
   resources :notes, only: %i[create destroy]
   get "tree" => "tree#show", as: :tree
 
-  # Defines the root path route ("/")
-  root "people#index"
+  # The family tree is the app's home; the people list is a manage/edit utility.
+  root "tree#show"
 end

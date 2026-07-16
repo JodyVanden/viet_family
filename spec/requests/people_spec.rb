@@ -19,12 +19,6 @@ RSpec.describe "People", type: :request do
     end
   end
 
-  describe "GET /" do
-    it "renders the people index at root" do
-      get root_path
-      expect(response).to have_http_status(:ok)
-    end
-  end
 
   describe "POST /people" do
     it "creates a person" do

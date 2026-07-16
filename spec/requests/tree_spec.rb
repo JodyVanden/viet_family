@@ -16,4 +16,10 @@ RSpec.describe "Tree", type: :request do
     get tree_path
     expect(response).to have_http_status(:ok)
   end
+
+  it "is the application root" do
+    get root_path
+    expect(response).to have_http_status(:ok)
+    expect(response.body).to include("Family tree")
+  end
 end
