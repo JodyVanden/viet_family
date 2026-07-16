@@ -40,6 +40,14 @@
     { "viewer": "father", "target": "son",  "term": "Cháu" },
     { "viewer": "me", "target": "niece",    "term": "Cháu" },
     { "viewer": "me", "target": "cousin_bac", "term": "Anh họ" },
-    { "viewer": "me", "target": "cousin_chu", "term": "Em họ" }
+    { "viewer": "me", "target": "cousin_chu", "term": "Em họ" },
+
+    { "_comment": "In-laws: a child's spouse, and a sibling's spouse (prefix follows the blood sibling's seniority).",
+      "viewer": "me", "target": "son_wife",         "term": "Con dâu" },
+    { "viewer": "me", "target": "daughter_husband", "term": "Con rể" },
+    { "viewer": "me", "target": "chi_husband",      "term": "Anh rể" },
+    { "viewer": "me", "target": "em_gai_husband",   "term": "Em rể" },
+    { "viewer": "em_gai", "target": "wife", "term": "Chị dâu" },
+    { "viewer": "anh", "target": "wife", "term": "Em dâu" }
   ]
 }

@@ -33,7 +33,12 @@
 
     { "id": "son",         "name": "Con Trai",     "gender": "male",   "birth_date": "2010-01-01", "birth_order": 1 },
     { "id": "daughter",    "name": "Con Gái",      "gender": "female", "birth_date": "2013-01-01", "birth_order": 2 },
-    { "id": "niece",       "name": "Cháu Gái",     "gender": "female", "birth_date": "2008-01-01", "birth_order": 1 }
+    { "id": "niece",       "name": "Cháu Gái",     "gender": "female", "birth_date": "2008-01-01", "birth_order": 1 },
+
+    { "id": "chi_husband",      "name": "Anh Rể",  "gender": "male",   "birth_date": "1982-06-06", "birth_order": 1 },
+    { "id": "em_gai_husband",   "name": "Em Rể",   "gender": "male",   "birth_date": "1987-06-06", "birth_order": 1 },
+    { "id": "son_wife",         "name": "Con Dâu", "gender": "female", "birth_date": "2011-06-06", "birth_order": 1 },
+    { "id": "daughter_husband", "name": "Con Rể",  "gender": "male",   "birth_date": "2012-06-06", "birth_order": 1 }
   ],
   "parents": [
     { "child": "bac_trai", "parent": "ong_noi" }, { "child": "bac_trai", "parent": "ba_noi" },
@@ -69,6 +74,10 @@
     { "a": "cau",         "b": "mo" },
     { "a": "di",          "b": "duong_di" },
     { "a": "me",          "b": "wife" },
-    { "a": "wife_father", "b": "wife_mother" }
+    { "a": "wife_father", "b": "wife_mother" },
+    { "a": "chi",         "b": "chi_husband" },
+    { "a": "em_gai",      "b": "em_gai_husband" },
+    { "a": "son",         "b": "son_wife" },
+    { "a": "daughter",    "b": "daughter_husband" }
   ]
 }

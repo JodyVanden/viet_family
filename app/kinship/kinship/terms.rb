@@ -33,6 +33,10 @@ module Kinship
       return in_law if in_law
 
       return "Con" if @graph.children(viewer_id).include?(target.id)
+
+      child_in_law = child_in_law_term(viewer_id, target)
+      return child_in_law if child_in_law
+
       return "Cháu" if descendant?(viewer_id, target.id)
 
       grandparent = grandparent_term(viewer_id, target)
@@ -40,6 +44,9 @@ module Kinship
 
       sibling = sibling_term(viewer, target)
       return sibling if sibling
+
+      sibling_in_law = sibling_in_law_term(viewer, target)
+      return sibling_in_law if sibling_in_law
 
       pibling = pibling_term(viewer_id, target)
       return pibling if pibling
@@ -54,6 +61,29 @@ module Kinship
     end
 
     def spouse_term(target) = target.male? ? "Chồng" : "Vợ"
+
+    # A child's spouse: Con dâu (son's wife) or Con rể (daughter's husband).
+    def child_in_law_term(viewer_id, target)
+      return nil unless @graph.children(viewer_id).any? { |c| @graph.spouses(c).include?(target.id) }
+
+      target.male? ? "Con rể" : "Con dâu"
+    end
+
+    # A sibling's spouse. The prefix follows the blood sibling's seniority
+    # (older → Anh/Chị, younger → Em); dâu is a brother's wife, rể a sister's
+    # husband. nil if the target isn't a sibling's spouse.
+    def sibling_in_law_term(viewer, target)
+      sibling_id = @graph.siblings(viewer.id).find { |s| @graph.spouses(s).include?(target.id) }
+      return nil unless sibling_id
+
+      sibling = @graph.person(sibling_id)
+      older = Kinship.seniority(sibling, viewer) == :older
+      if sibling.male?
+        older ? "Chị dâu" : "Em dâu"
+      else
+        older ? "Anh rể" : "Em rể"
+      end
+    end
 
     # Cháu covers both grandchildren and the children of one's siblings.
     def descendant?(viewer_id, target_id)

@@ -109,6 +109,9 @@ pass the *same* file. This is how the two implementations are prevented from dri
 | Younger sibling | Em (em trai / em gái) |
 | Husband / Wife | Chồng / Vợ |
 | Father-/mother-in-law (spouse's parents) | Ba vợ·chồng / Má vợ·chồng |
+| Son's wife / Daughter's husband | Con dâu / Con rể |
+| Older brother's wife / Older sister's husband | Chị dâu / Anh rể |
+| Younger sibling's spouse (brother's wife / sister's husband) | Em dâu / Em rể |
 | Son / Daughter | Con (con trai / con gái) |
 | Grandchild / niece·nephew | Cháu |
 | Cousin (extended, by age) | Anh/Chị/Em họ |
