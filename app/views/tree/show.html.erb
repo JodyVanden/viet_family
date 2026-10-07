@@ -12,8 +12,8 @@
       Click anyone to see how they address everyone — the whole family stays visible; their blood line is highlighted.
     </p>
     <div
-      class="max-w-6xl mx-auto border border-gray-200 rounded-lg bg-white overflow-hidden"
-      style="height: 70vh;"
+      class="border border-gray-200 rounded-lg bg-white overflow-hidden"
+      style="height: 80vh;"
       data-controller="tree"
       data-tree-nodes-value="<%= tree_nodes_json(@people, @levels) %>"
       data-tree-parent-edges-value="<%= @parent_edges.to_json %>"
@@ -21,6 +21,6 @@
       data-tree-terms-value="<%= @terms.to_json %>">
     </div>
   <% else %>
-    <p class="max-w-6xl mx-auto text-gray-500">No people yet. <%= link_to "Add someone", new_person_path, class: "text-indigo-600" %>.</p>
+    <p class="text-gray-500">No people yet. <%= link_to "Add someone", new_person_path, class: "text-indigo-600" %>.</p>
   <% end %>
 </div>
