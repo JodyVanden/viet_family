@@ -136,11 +136,37 @@ export default class extends Controller {
     const keys = b ? [ [ a, b ].sort().join("-"), String(a), String(b) ] : [ String(a) ]
     const ids = []
     keys.forEach((k) => (this.childrenByKey.get(k) || []).forEach((c) => ids.push(c)))
-    // Childless siblings first (they cluster together), then the child whose own
-    // subtree spreads out — so aunts/uncles aren't split around it. Ties by age.
-    const hasKids = (id) => (this.childrenOfPerson.get(id) || []).length > 0
-    return [ ...new Set(ids) ].sort((x, y) =>
-      (hasKids(x) - hasKids(y)) || (this.orderIndex.get(x) - this.orderIndex.get(y)))
+    // Seniority order (oldest first), matching the kinship engine's rule.
+    const bySeniority = [ ...new Set(ids) ].sort((x, y) => this.orderIndex.get(x) - this.orderIndex.get(y))
+
+    // A child whose spouse also has parents rendered in the tree links two
+    // family blocks together. Move that child to whichever edge of the row
+    // faces the in-law family instead of their seniority slot, so the two
+    // blocks end up adjacent instead of the in-law block reaching back across
+    // this whole row to find them.
+    const toStart = []
+    const toEnd = []
+    const normal = []
+    bySeniority.forEach((id) => {
+      const edge = this.linkedFamilyEdge(a, id)
+      if (edge === "start") toStart.push(id)
+      else if (edge === "end") toEnd.push(id)
+      else normal.push(id)
+    })
+    return [ ...toStart, ...normal, ...toEnd ]
+  }
+
+  // Which edge of `parent`'s sibling row `child` belongs on, if `child`'s
+  // spouse has their own parents in the tree: "end" when this side is laid
+  // out first (lower orderIndex than the in-law root), "start" when it's laid
+  // out second — so the two blocks meet in the middle. `null` for an ordinary
+  // married-in spouse with no parents of their own.
+  linkedFamilyEdge(parent, child) {
+    const spouse = this.spouseOf.get(child)
+    if (!spouse || !this.hasParents(spouse)) return null
+    const inLawParent = (this.parentsOf.get(spouse) || [])[0]
+    if (inLawParent === undefined) return null
+    return this.orderIndex.get(parent) < this.orderIndex.get(inLawParent) ? "end" : "start"
   }
 
   // ---- layout -------------------------------------------------------------
@@ -165,21 +191,26 @@ export default class extends Controller {
     return units
   }
 
-  layoutUnit(a, b) {
+  // `spouseOnLeft` faces a married-in spouse away from the blood siblings beside
+  // them: true for the leftmost sibling in a row, false for the rightmost, and
+  // whichever side has fewer siblings for everyone in between (ties go right,
+  // matching the original blood-left/spouse-right default).
+  layoutUnit(a, b, spouseOnLeft = false) {
     if (this.placed.has(a)) return this.centerXOf(a, b)
     this.placed.add(a)
     if (b) this.placed.add(b)
 
     const children = this.unitChildren(a, b)
-    if (children.length === 0) return this.placeAtCursor(a, b)
+    if (children.length === 0) return this.placeAtCursor(a, b, spouseOnLeft)
 
-    const centers = children.map((child) => {
+    const centers = children.map((child, i) => {
       const spouse = this.spouseOf.get(child)
       const partner = spouse && !this.placed.has(spouse) && this.hasParents(child) ? spouse : null
-      return this.layoutUnit(child, partner)
+      const childSpouseOnLeft = i < children.length - 1 - i
+      return this.layoutUnit(child, partner, childSpouseOnLeft)
     })
     const centerX = (Math.min(...centers) + Math.max(...centers)) / 2
-    this.placeAtCenter(a, b, centerX)
+    this.placeAtCenter(a, b, centerX, spouseOnLeft)
     return centerX
   }
 
@@ -188,31 +219,35 @@ export default class extends Controller {
     return b ? 2 * C.NODE_W + C.COUPLE_GAP : C.NODE_W
   }
 
-  placeAtCursor(a, b) {
+  placeAtCursor(a, b, spouseOnLeft = false) {
     const width = this.unitWidth(b)
     const centerX = this.cursorX + width / 2
-    this.placeAt(a, b, centerX)
+    this.placeAt(a, b, centerX, spouseOnLeft)
     this.cursorX += width + this.constructor.SIBLING_GAP
     return centerX
   }
 
-  placeAtCenter(a, b, centerX) {
-    this.placeAt(a, b, centerX)
+  placeAtCenter(a, b, centerX, spouseOnLeft = false) {
+    this.placeAt(a, b, centerX, spouseOnLeft)
     this.cursorX = Math.max(this.cursorX, centerX + this.unitWidth(b) / 2 + this.constructor.SIBLING_GAP)
   }
 
-  placeAt(a, b, centerX) {
+  placeAt(a, b, centerX, spouseOnLeft = false) {
     const C = this.constructor
     const leftX = centerX - this.unitWidth(b) / 2
-    this.positions.set(a, { x: leftX, y: this.yOf(this.level.get(a)) })
-    if (b) this.positions.set(b, { x: leftX + C.NODE_W + C.COUPLE_GAP, y: this.yOf(this.level.get(b)) })
+    const leftPerson = b && spouseOnLeft ? b : a
+    const rightPerson = b && spouseOnLeft ? a : b
+    this.positions.set(leftPerson, { x: leftX, y: this.yOf(this.level.get(leftPerson)) })
+    if (rightPerson) this.positions.set(rightPerson, { x: leftX + C.NODE_W + C.COUPLE_GAP, y: this.yOf(this.level.get(rightPerson)) })
     this.families.push({ a, b, children: this.unitChildren(a, b) })
   }
 
   centerXOf(a, b) {
     const C = this.constructor
     const pa = this.positions.get(a)
-    return b ? pa.x + C.NODE_W + C.COUPLE_GAP / 2 : pa.x + C.NODE_W / 2
+    if (!b) return pa.x + C.NODE_W / 2
+    const left = Math.min(pa.x, this.positions.get(b).x)
+    return left + C.NODE_W + C.COUPLE_GAP / 2
   }
 
   placeLeftovers() {
@@ -284,8 +319,31 @@ export default class extends Controller {
   }
 
   draw() {
+    this.families.forEach((f) => this.drawCoupleGroup(f)) // behind everything
     this.families.forEach((f) => this.drawFamily(f))
     this.nodes.forEach((n) => this.drawNode(n))
+  }
+
+  // A subtle rounded panel behind a married pair so a couple reads as one unit,
+  // distinct from the siblings sitting beside them on the same row.
+  drawCoupleGroup(f) {
+    if (!f.b) return
+
+    const C = this.constructor
+    const pa = this.positions.get(f.a)
+    const pb = this.positions.get(f.b)
+    const left = Math.min(pa.x, pb.x)
+    const right = Math.max(pa.x, pb.x) + C.NODE_W
+    const pad = 8
+
+    const rect = document.createElementNS("http://www.w3.org/2000/svg", "rect")
+    rect.setAttribute("x", left - pad)
+    rect.setAttribute("y", pa.y - pad)
+    rect.setAttribute("width", right - left + pad * 2)
+    rect.setAttribute("height", C.NODE_H + pad)
+    rect.setAttribute("rx", 14)
+    rect.setAttribute("fill", "#eef2ff") // indigo-50
+    this.svg.appendChild(rect)
   }
 
   line(x1, y1, x2, y2) {
@@ -370,14 +428,15 @@ export default class extends Controller {
     this.nodeEls.set(n.id, card)
   }
 
-  // Glide the viewport so the given person sits in the middle, zooming in to a
-  // readable level if the tree is currently zoomed out.
+  // Glide the viewport so the given person sits in the middle. Only zooms in if
+  // the tree is currently more zoomed out than a readable minimum — otherwise
+  // the viewer's own zoom level (set by scrolling) is left alone.
   centerOn(id) {
     const pos = this.positions.get(id)
     if (!pos) return
 
     const C = this.constructor
-    this.scale = Math.max(this.scale, 1)
+    this.scale = Math.max(this.scale, 0.8)
     const cx = pos.x + C.NODE_W / 2
     const cy = pos.y + C.NODE_H / 2
     this.tx = this.element.clientWidth / 2 - cx * this.scale
@@ -385,10 +444,10 @@ export default class extends Controller {
     this.animateTo()
   }
 
-  // Zoom back out to frame the whole family (clicking the empty background).
+  // Clicking the empty background just clears the highlight — it no longer
+  // snaps the zoom back out, so the viewer's own pan/zoom is preserved.
   resetView() {
-    this.fitToView()
-    this.animateTo()
+    this.highlightPerson(this.anchorId)
   }
 
   // Apply the current transform with a brief glide.
@@ -500,7 +559,16 @@ export default class extends Controller {
     })
     this.element.addEventListener("wheel", (e) => {
       e.preventDefault()
+      const rect = this.element.getBoundingClientRect()
+      const pointerX = e.clientX - rect.left
+      const pointerY = e.clientY - rect.top
+      // Keep the point under the cursor fixed on screen as the scale changes,
+      // instead of zooming around the stage's top-left corner.
+      const worldX = (pointerX - this.tx) / this.scale
+      const worldY = (pointerY - this.ty) / this.scale
       this.scale = Math.min(2.5, Math.max(0.3, this.scale * (e.deltaY < 0 ? 1.1 : 0.9)))
+      this.tx = pointerX - worldX * this.scale
+      this.ty = pointerY - worldY * this.scale
       this.applyTransform()
     }, { passive: false })
   }

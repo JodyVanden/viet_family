@@ -38,7 +38,22 @@
     { "id": "chi_husband",      "name": "Anh Rể",  "gender": "male",   "birth_date": "1982-06-06", "birth_order": 1 },
     { "id": "em_gai_husband",   "name": "Em Rể",   "gender": "male",   "birth_date": "1987-06-06", "birth_order": 1 },
     { "id": "son_wife",         "name": "Con Dâu", "gender": "female", "birth_date": "2011-06-06", "birth_order": 1 },
-    { "id": "daughter_husband", "name": "Con Rể",  "gender": "male",   "birth_date": "2012-06-06", "birth_order": 1 }
+    { "id": "daughter_husband", "name": "Con Rể",  "gender": "male",   "birth_date": "2012-06-06", "birth_order": 1 },
+
+    { "id": "co_to",         "name": "Cố Nội",        "gender": "female", "birth_date": "1905-01-01", "birth_order": 1 },
+    { "id": "ong_noi_bac",   "name": "Ông Nội Lớn",   "gender": "male",   "birth_date": "1927-01-01", "birth_order": 1 },
+    { "id": "ong_noi_co_sb", "name": "Bà Nội Cô",     "gender": "female", "birth_date": "1934-01-01", "birth_order": 2 },
+    { "id": "ong_noi_chu",   "name": "Ông Nội Nhỏ",   "gender": "male",   "birth_date": "1935-01-01", "birth_order": 3 },
+    { "id": "nguoi_ho_bac",  "name": "Người Họ Bác",  "gender": "male",   "birth_date": "1957-01-01", "birth_order": 1 },
+    { "id": "nguoi_ho_co",   "name": "Người Họ Cô",   "gender": "female", "birth_date": "1958-01-01", "birth_order": 1 },
+    { "id": "nguoi_ho_chu",  "name": "Người Họ Chú",  "gender": "male",   "birth_date": "1959-01-01", "birth_order": 1 },
+
+    { "id": "ba_so",          "name": "Bà Sơ",          "gender": "female", "birth_date": "1907-01-01", "birth_order": 1 },
+    { "id": "ong_ngoai_cau",  "name": "Ông Ngoại Trai", "gender": "male",   "birth_date": "1929-01-01", "birth_order": 2 },
+    { "id": "ong_ngoai_di",   "name": "Bà Ngoại Gái",   "gender": "female", "birth_date": "1931-01-01", "birth_order": 3 },
+    { "id": "nguoi_ho_cau",   "name": "Người Mẹ Cậu",  "gender": "male",   "birth_date": "1960-01-01", "birth_order": 1 },
+    { "id": "nguoi_ho_di",    "name": "Người Mẹ Dì",   "gender": "female", "birth_date": "1961-01-01", "birth_order": 1 },
+    { "id": "chong_ho_di",    "name": "Chồng Người Mẹ Dì", "gender": "male", "birth_date": "1960-01-01", "birth_order": 1 }
   ],
   "parents": [
     { "child": "bac_trai", "parent": "ong_noi" }, { "child": "bac_trai", "parent": "ba_noi" },
@@ -63,7 +78,21 @@
     { "child": "son",      "parent": "me" }, { "child": "son",      "parent": "wife" },
     { "child": "daughter", "parent": "me" }, { "child": "daughter", "parent": "wife" },
 
-    { "child": "niece",    "parent": "anh" }
+    { "child": "niece",    "parent": "anh" },
+
+    { "child": "ong_noi",     "parent": "co_to" },
+    { "child": "ong_noi_bac", "parent": "co_to" },
+    { "child": "ong_noi_co_sb", "parent": "co_to" },
+    { "child": "ong_noi_chu", "parent": "co_to" },
+    { "child": "nguoi_ho_bac", "parent": "ong_noi_bac" },
+    { "child": "nguoi_ho_co",  "parent": "ong_noi_co_sb" },
+    { "child": "nguoi_ho_chu", "parent": "ong_noi_chu" },
+
+    { "child": "ba_ngoai",     "parent": "ba_so" },
+    { "child": "ong_ngoai_cau", "parent": "ba_so" },
+    { "child": "ong_ngoai_di",  "parent": "ba_so" },
+    { "child": "nguoi_ho_cau", "parent": "ong_ngoai_cau" },
+    { "child": "nguoi_ho_di",  "parent": "ong_ngoai_di" }
   ],
   "spouses": [
     { "a": "ong_noi",     "b": "ba_noi" },
@@ -78,6 +107,7 @@
     { "a": "chi",         "b": "chi_husband" },
     { "a": "em_gai",      "b": "em_gai_husband" },
     { "a": "son",         "b": "son_wife" },
-    { "a": "daughter",    "b": "daughter_husband" }
+    { "a": "daughter",    "b": "daughter_husband" },
+    { "a": "nguoi_ho_di", "b": "chong_ho_di" }
   ]
 }

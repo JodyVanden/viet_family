@@ -43,3 +43,7 @@
 # OS
 .DS_Store
 /coverage/
+
+# Real family data (private — exported via Family::Exporter, loaded instead of
+# the fictional FamilySeeder demo data when present). See db/seeds.rb.
+/db/seed_data/*.local.json

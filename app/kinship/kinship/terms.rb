@@ -51,6 +51,9 @@ module Kinship
       pibling = pibling_term(viewer_id, target)
       return pibling if pibling
 
+      extended = extended_pibling_term(viewer_id, target)
+      return extended if extended
+
       cousin_term(viewer, target)
     end
 
@@ -170,6 +173,41 @@ module Kinship
       elsif mother && @graph.siblings(mother).include?(person.id)
         person.male? ? "Cậu" : "Dì"
       end
+    end
+
+    # A grandparent's sibling's child — one generation above the viewer, with no
+    # direct cousin link (their parent isn't the viewer's parent's sibling).
+    # Follows the connecting parent's side: on the father's side this is a
+    # generation-shifted Bác/Chú/Cô, marked "họ" to show it's extended; on the
+    # mother's side it stays the plain Cậu/Dì (and Dượng/Mợ for their spouse),
+    # same as a direct maternal pibling.
+    def extended_pibling_term(viewer_id, target)
+      blood = blood_extended_pibling_term(viewer_id, target)
+      return blood if blood
+
+      @graph.spouses(target.id).each do |spouse_id|
+        base = blood_extended_pibling_term(viewer_id, @graph.person(spouse_id))
+        return SPOUSE_OF_PIBLING[base] if base && SPOUSE_OF_PIBLING.key?(base)
+      end
+      nil
+    end
+
+    def blood_extended_pibling_term(viewer_id, person)
+      @graph.parents(viewer_id).each do |parent_id|
+        parent = @graph.person(parent_id)
+        grandfather = @graph.father(parent_id)
+        grandmother = @graph.mother(parent_id)
+
+        if grandfather && @graph.siblings(grandfather).any? { |s| @graph.children(s).include?(person.id) }
+          return "Cô họ" unless person.male?
+          return Kinship.senior?(person, parent) ? "Bác họ" : "Chú họ"
+        end
+
+        if grandmother && @graph.siblings(grandmother).any? { |s| @graph.children(s).include?(person.id) }
+          return person.male? ? "Cậu" : "Dì"
+        end
+      end
+      nil
     end
 
     # The term for the spouse of a blood aunt/uncle, keyed by that relative's term.

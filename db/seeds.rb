@@ -8,8 +8,17 @@
 #     MovieGenre.find_or_create_by!(name: genre_name)
 #   end
 
-# Canonical sample Vietnamese family (see Family::Seeder), incl. the driving
-# perspective case: "Ba Vợ" is the husband's father-in-law but the son's
-# maternal grandfather (Ông ngoại).
-Family::Seeder.seed!
-puts "Seeded #{Person.count} people and #{Relationship.count} relationships."
+# Real family data is private and never committed (see .gitignore). If it has
+# been exported locally to db/seed_data/family.local.json (via Family::Exporter),
+# load that; otherwise fall back to the fictional demo family (Family::FamilySeeder),
+# which includes the driving perspective case: "Ba Vợ" is the husband's
+# father-in-law but the son's maternal grandfather (Ông ngoại).
+private_family_path = Rails.root.join("db/seed_data/family.local.json")
+
+if File.exist?(private_family_path)
+  Family::Importer.import(File.read(private_family_path))
+  puts "Imported private family: #{Person.count} people and #{Relationship.count} relationships."
+else
+  Family::FamilySeeder.seed!
+  puts "Seeded demo family: #{Person.count} people and #{Relationship.count} relationships."
+end

@@ -42,6 +42,14 @@
     { "viewer": "me", "target": "cousin_bac", "term": "Anh họ" },
     { "viewer": "me", "target": "cousin_chu", "term": "Em họ" },
 
+    { "_comment": "Extended pibling: a grandparent's sibling's child (one generation above the viewer, no direct cousin link). Father-side gets the 'họ' suffix on Bác/Chú/Cô; mother-side stays plain Cậu/Dì, same as a direct mother's sibling.",
+      "viewer": "me", "target": "nguoi_ho_bac", "term": "Bác họ" },
+    { "viewer": "me", "target": "nguoi_ho_co",  "term": "Cô họ" },
+    { "viewer": "me", "target": "nguoi_ho_chu", "term": "Chú họ" },
+    { "viewer": "me", "target": "nguoi_ho_cau", "term": "Cậu" },
+    { "viewer": "me", "target": "nguoi_ho_di",  "term": "Dì" },
+    { "viewer": "me", "target": "chong_ho_di",  "term": "Dượng" },
+
     { "_comment": "In-laws: a child's spouse, and a sibling's spouse (prefix follows the blood sibling's seniority).",
       "viewer": "me", "target": "son_wife",         "term": "Con dâu" },
     { "viewer": "me", "target": "daughter_husband", "term": "Con rể" },
